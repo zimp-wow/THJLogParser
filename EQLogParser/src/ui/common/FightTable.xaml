@@ -67,6 +67,11 @@
                            SourceType="{x:Type local:Fight}">
       <syncfusion:SfDataGrid.ContextMenu>
         <ContextMenu x:Name="rightClickMenu" Closed="RightClickClosed">
+          <MenuItem x:Name="menuRefreshSelected" Header="Refresh Selected" Click="RefreshSelected">
+            <MenuItem.Icon>
+              <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_Undo" />
+            </MenuItem.Icon>
+          </MenuItem>
           <MenuItem InputGestureText="Ctrl+C" Header="Copy" Command="{Binding Source={x:Static Member=local:ContextMenuCommands.Copy}}" 
                     CommandParameter="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
             <MenuItem.Icon>

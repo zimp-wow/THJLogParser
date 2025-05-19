@@ -179,9 +179,6 @@
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\..\..\..\..\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.IO.Compression.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MaterialDarkCustom\Syncfusion.Themes.MaterialDarkCustom.csproj" />
     <ProjectReference Include="..\MaterialLightCustom\Syncfusion.Themes.MaterialLightCustom.csproj" />
   </ItemGroup>

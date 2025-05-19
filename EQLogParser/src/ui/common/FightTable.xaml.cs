@@ -301,6 +301,7 @@ namespace EQLogParser
       }, DispatcherPriority.DataBind);
     }
 
+    private void RefreshSelected(object sender, RoutedEventArgs e) => DataGridSelectionChanged();
     private void ClearClick(object sender, RoutedEventArgs e) => DataManager.Instance.Clear();
     private void SelectionChanged(object sender, GridSelectionChangedEventArgs e) => DataGridSelectionChanged();
 
