@@ -169,12 +169,12 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Octokit" Version="14.0.0" />
-    <PackageReference Include="Syncfusion.SfChart.WPF" Version="29.1.41" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.1.41" />
-    <PackageReference Include="Syncfusion.Shared.Base" Version="29.1.41" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="29.1.41" />
-    <PackageReference Include="Syncfusion.Themes.MaterialLight.WPF" Version="29.1.41" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="29.1.41" />
+    <PackageReference Include="Syncfusion.SfChart.WPF" Version="29.2.4" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.2.4" />
+    <PackageReference Include="Syncfusion.Shared.Base" Version="29.2.4" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="29.2.4" />
+    <PackageReference Include="Syncfusion.Themes.MaterialLight.WPF" Version="29.2.4" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="29.2.4" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.4" />
   </ItemGroup>
@@ -194,5 +194,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Syncfusion.Licensing.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
