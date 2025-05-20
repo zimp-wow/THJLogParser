@@ -35,17 +35,6 @@ jobs:
           dotnet sln EQLogParser.sln remove MaterialDarkCustom/Syncfusion.Themes.MaterialDarkCustom.csproj || echo "MaterialDarkCustom already removed or not found"
           dotnet sln EQLogParser.sln remove MaterialLightCustom/Syncfusion.Themes.MaterialLightCustom.csproj || echo "MaterialLightCustom already removed or not found"
 
-      # Determine version for build and release
-      - name: Determine version for release
-        id: version
-        run: |
-          $date = Get-Date -Format "yyyy.MM.dd"
-          $buildNumber = $env:GITHUB_RUN_NUMBER
-          $version = "$date-build$buildNumber"
-          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
-          echo "VERSION_DOT=$($date.Replace('-', '.')).$buildNumber" >> $env:GITHUB_OUTPUT
-        shell: pwsh
-
       # Update the EQLogParser.csproj to fix project and runtime settings
       - name: Update main project file to fix dependencies and runtime settings
         run: |
@@ -60,29 +49,6 @@ jobs:
           if ($content -notmatch '<RuntimeIdentifiers>') {
             $replacement = '<PropertyGroup>' + [Environment]::NewLine + '    <PublishSingleFile>true</PublishSingleFile>' + [Environment]::NewLine + '    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>'
             $content = $content -replace '<PropertyGroup>\s*<PublishSingleFile>true</PublishSingleFile>', $replacement
-          }
-
-          # Ensure consistent versioning across all version properties
-          $versionDot = "${{ steps.version.outputs.VERSION_DOT }}"
-          $content = $content -replace '<ApplicationVersion>.*?</ApplicationVersion>', "<ApplicationVersion>$versionDot</ApplicationVersion>"
-
-          # Add or update other version properties for consistency
-          if ($content -notmatch '<AssemblyVersion>') {
-            $content = $content -replace '</PropertyGroup>', "  <AssemblyVersion>$versionDot</AssemblyVersion>$([Environment]::NewLine)</PropertyGroup>"
-          } else {
-            $content = $content -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$versionDot</AssemblyVersion>"
-          }
-
-          if ($content -notmatch '<FileVersion>') {
-            $content = $content -replace '</PropertyGroup>', "  <FileVersion>$versionDot</FileVersion>$([Environment]::NewLine)</PropertyGroup>"
-          } else {
-            $content = $content -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$versionDot</FileVersion>"
-          }
-
-          if ($content -notmatch '<Version>') {
-            $content = $content -replace '</PropertyGroup>', "  <Version>$versionDot</Version>$([Environment]::NewLine)</PropertyGroup>"
-          } else {
-            $content = $content -replace '<Version>.*?</Version>', "<Version>$versionDot</Version>"
           }
 
           # Add WPF specific properties to fix resource handling in single file publishing
@@ -119,8 +85,6 @@ jobs:
             Set-Content $utilFile $utilContent
           }
 
-      # Skip clean step as it's causing issues
-
       - name: Ensure App.xaml is properly configured for single-file publishing
         run: |
           $appXamlPath = "EQLogParser/App.xaml"
@@ -129,16 +93,15 @@ jobs:
             $appXaml = Get-Content $appXamlPath -Raw
             
             # Ensure there are no hardcoded assembly versions in the XAML
-            if ($appXaml -match 'Version=[0-9\.]+') {
+            if ($appXaml -match 'Version=[0-9\\.]+') {
               Write-Host "Warning: Found hardcoded version reference in App.xaml. This can cause issues with single-file publishing."
             }
           } else {
             Write-Host "Warning: App.xaml not found at expected location"
           }
 
-          # Set version variable (do not write to Directory.Build.props)
-          $versionValue = "${{ steps.version.outputs.VERSION_DOT }}"
-          Write-Host "Skipping Directory.Build.props version injection to avoid NuGet restore issues."
+          # No version variable needed
+          Write-Host "Skipping Directory.Build.props version injection and dynamic versioning."
 
       - name: Clear NuGet cache and restore dependencies with specific runtime
         run: |
@@ -148,24 +111,15 @@ jobs:
 
       - name: Build Single Executable
         run: |
-          # First, set version variables uniformly for all assemblies
-          $version="${{ steps.version.outputs.VERSION_DOT }}"
-          Write-Host "Building with version: $version"
+          Write-Host "Building with static version from csproj."
 
-          # Special handling for PublishSingleFile - we need to ensure consistent versioning
-          # across all assemblies, resources, and compiled XAML
-          dotnet publish EQLogParser/EQLogParser.csproj -c Release -r win-x64 --self-contained true `
-            /p:PublishSingleFile=true `
-            /p:IncludeNativeLibrariesForSelfExtract=true `
-            /p:DebugType=None `
-            /p:DebugSymbols=false `
-            /p:EnableCompressionInSingleFile=true `
-            /p:IncludeAllContentForSelfExtract=true `
-            /p:AssemblyVersion=$version `
-            /p:FileVersion=$version `
-            /p:Version=$version `
-            /p:InformationalVersion=$version `
-            /p:ProductVersion=$version `
+          dotnet publish EQLogParser/EQLogParser.csproj -c Release -r win-x64 --self-contained true \
+            /p:PublishSingleFile=true \
+            /p:IncludeNativeLibrariesForSelfExtract=true \
+            /p:DebugType=None \
+            /p:DebugSymbols=false \
+            /p:EnableCompressionInSingleFile=true \
+            /p:IncludeAllContentForSelfExtract=true \
             -o publish
 
           Write-Host "Contents of publish directory (after build):"
@@ -256,8 +210,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: THJLogParser ${{ steps.version.outputs.VERSION }}
-          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: THJLogParser
+          tag_name: v${{ github.run_number }}
           draft: false
           prerelease: false
           files: |
