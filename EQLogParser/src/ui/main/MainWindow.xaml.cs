@@ -109,7 +109,17 @@ namespace EQLogParser
         MainActions.LoadTheme(this, CurrentTheme);
 
         InitializeComponent();
-        
+        // <syncfusion:NotifyIcon x:Name="notifyIcon" ShowInTaskBar="True" Header="NotifyIcon" Text="EQLogParser" Icon="EQLogParser.ico" Click="NotifyIcon_Click"/>
+        //NotifyIcon notifyIcon = new NotifyIcon();
+        //notifyIcon.Height = 80;
+        //notifyIcon.Width = 150;
+        //notifyIcon.ShowInTaskBar = true;
+        //notifyIcon.Text = "EQLogParser";
+        //notifyIcon.Icon = (ImageSource)new ImageSourceConverter().ConvertFromString("EQLogParser.ico");
+        //notifyIcon.Click += NotifyIcon_Click;
+        //notifyIcon.Header = "NotifyIcon";
+        //
+        //this.Content = notifyIcon;
         // Add the "Check for Updates" menu item
         AddCheckForUpdatesMenuItem();
 

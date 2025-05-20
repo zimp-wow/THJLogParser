@@ -331,6 +331,7 @@ namespace EQLogParser
       {
         stats.Total += record.Total;
         stats.Max = Math.Max(stats.Max, record.Total);
+        stats.Min = stats.Min == 0 ? record.Total : Math.Min(stats.Min, record.Total);
       }
 
       if (record.OverTotal > 0)
@@ -370,6 +371,7 @@ namespace EQLogParser
         to.TotalSlay += from.TotalSlay;
         to.Hits += from.Hits;
         to.Max = Math.Max(to.Max, from.Max);
+        to.Min = to.Min == 0 ? from.Min : Math.Min(to.Min, from.Min);
         to.Extra += from.Extra;
         to.AssHits += from.AssHits;
         to.CritHits += from.CritHits;

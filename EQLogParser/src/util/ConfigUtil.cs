@@ -124,6 +124,7 @@ namespace EQLogParser
           SettingsUpdated = true;
         }
       }
+      Save();
     }
 
     internal static ConcurrentDictionary<string, string> ReadPetMapping()
