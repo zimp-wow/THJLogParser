@@ -120,8 +120,6 @@ namespace EQLogParser
         //notifyIcon.Header = "NotifyIcon";
         //
         //this.Content = notifyIcon;
-        // Add the "Check for Updates" menu item
-        AddCheckForUpdatesMenuItem();
 
         // add tabs to the right
         ((DocumentContainer)dockSite.DocContainer).AddTabDocumentAtLast = true;
@@ -207,122 +205,12 @@ namespace EQLogParser
           ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).Root.Level = Level.Debug;
           ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
         }
-        
-        // Register to check for updates after UI is loaded
-        this.Loaded += MainWindow_Loaded;
       }
       catch (Exception e)
       {
         LOG.Error(e);
         throw;
       }
-    }
-
-    private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        // Check for updates after a slight delay to ensure the UI is fully loaded
-        await Task.Delay(2000);
-        await CheckForUpdatesAsync();
-    }
-    
-    /// <summary>
-    /// Checks for application updates from GitHub releases.
-    /// </summary>
-    private async Task CheckForUpdatesAsync()
-    {
-        try
-        {
-            LOG.Info("Checking for updates...");
-            
-            // Get the current version from FileVersionInfo rather than the VERSION constant
-            var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            var currentVersion = fvi.FileVersion ?? VERSION.TrimStart('v');
-            
-            // Log the version being used for comparison
-            LOG.Info($"Current version: {currentVersion}");
-            
-            // Check for updates
-            var (isUpdateAvailable, newVersion, downloadUrl) = await UpdaterUtility.CheckForUpdateAsync();
-            
-            if (isUpdateAvailable && !string.IsNullOrEmpty(downloadUrl))
-            {
-                LOG.Info($"Update available: {newVersion}");
-                
-                // Show update dialog
-                var updateDialog = new UpdateDialog(currentVersion, newVersion, downloadUrl);
-                updateDialog.Owner = this;
-                updateDialog.ShowDialog();
-            }
-            else
-            {
-                LOG.Info("No updates available or unable to check for updates.");
-            }
-        }
-        catch (Exception ex)
-        {
-            LOG.Error("Error checking for updates", ex);
-        }
-    }
-    
-    /// <summary>
-    /// Adds a menu item to check for updates manually.
-    /// </summary>
-    private void AddCheckForUpdatesMenuItem()
-    {
-        // Skip adding menu item if FontAwesome libraries can't be found - prevents build errors
-        try
-        {
-            // First find the menu
-            ItemCollection menuItems = null;
-            if (this.FindName("fileMenu") is MenuItem fileMenuItem)
-            {
-                var parent = fileMenuItem.Parent;
-                if (parent is Menu parentMenu)
-                {
-                    menuItems = parentMenu.Items;
-                }
-            }
-            
-            if (menuItems == null)
-            {
-                LOG.Warn("Could not find main menu to add Check for Updates item");
-                return;
-            }
-            
-            // Find or create the Help menu
-            var helpMenu = findMenuItem(menuItems, "Help");
-            if (helpMenu == null)
-            {
-                helpMenu = new MenuItem { Header = "Help" };
-                menuItems.Add(helpMenu);
-            }
-            
-            // Create the update menu item without FontAwesome icons to avoid build errors
-            var updateMenuItem = new MenuItem
-            {
-                Header = "Check for Updates"
-            };
-            
-            updateMenuItem.Click += async (sender, e) => await CheckForUpdatesAsync();
-            helpMenu.Items.Add(updateMenuItem);
-        }
-        catch (Exception ex)
-        {
-            LOG.Error("Error adding update menu item", ex);
-        }
-    }
-    
-    private MenuItem findMenuItem(ItemCollection items, string header)
-    {
-        foreach (object item in items)
-        {
-            if (item is MenuItem menuItem && menuItem.Header.ToString() == header)
-            {
-                return menuItem;
-            }
-        }
-        return null;
     }
 
     internal void CopyToEQClick(string type) => (playerParseTextWindow.Content as ParsePreview)?.CopyToEQClick(type);
