@@ -113,13 +113,13 @@ jobs:
         run: |
           Write-Host "Building with static version from csproj."
 
-          dotnet publish EQLogParser/EQLogParser.csproj -c Release -r win-x64 --self-contained true \
-            /p:PublishSingleFile=true \
-            /p:IncludeNativeLibrariesForSelfExtract=true \
-            /p:DebugType=None \
-            /p:DebugSymbols=false \
-            /p:EnableCompressionInSingleFile=true \
-            /p:IncludeAllContentForSelfExtract=true \
+          dotnet publish EQLogParser/EQLogParser.csproj -c Release -r win-x64 --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:IncludeNativeLibrariesForSelfExtract=true `
+            /p:DebugType=None `
+            /p:DebugSymbols=false `
+            /p:EnableCompressionInSingleFile=true `
+            /p:IncludeAllContentForSelfExtract=true `
             -o publish
 
           Write-Host "Contents of publish directory (after build):"
