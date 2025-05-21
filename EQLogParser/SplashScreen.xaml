@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen">
     <Border CornerRadius="16" BorderBrush="#FF444B5D" BorderThickness="2" Padding="0" Background="#FF23272E">
         <Grid>
-            <Image Source="splash.png" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Image Source="pack://application:,,,/src/ui/main/splash.png" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </Border>
 </Window>
