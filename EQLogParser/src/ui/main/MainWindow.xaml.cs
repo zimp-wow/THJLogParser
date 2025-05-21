@@ -861,7 +861,7 @@ namespace EQLogParser
 
       if (!string.IsNullOrEmpty(line) && line.Length > 30)
       {
-        var lineData = new LineData { Action = line.Substring(ACTION_INDEX), LineNumber = LineCount, BeginTime = dateTime };
+        var lineData = new LineData { FullLine = line, Action = line.Substring(ACTION_INDEX), LineNumber = LineCount, BeginTime = dateTime };
 
         // avoid having other things parse chat by accident
         if (ChatLineParser.Process(lineData, line) is ChatType chatType)
