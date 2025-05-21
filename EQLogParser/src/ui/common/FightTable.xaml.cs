@@ -107,7 +107,7 @@ namespace EQLogParser
       DataManager.Instance.EventsNewFight += EventsNewFight;
       DataManager.Instance.EventsUpdateFight += EventsUpdateFight;
       DataManager.Instance.EventsNewNonTankingFight += EventsNewNonTankingFight;
-      (Application.Current.MainWindow as MainWindow).EventsThemeChanged += EventsThemeChanged;
+      MainWindow.mw.EventsThemeChanged += EventsThemeChanged;
     }
 
     internal IEnumerable<Fight> GetSelectedFights() => dataGrid.SelectedItems.Cast<Fight>().Where(item => !item.IsInactivity);

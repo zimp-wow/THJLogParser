@@ -69,147 +69,152 @@ namespace EQLogParser
     private LogReader EQLogReader = null;
     private List<bool> LogWindows = new List<bool>();
     private bool DoneLoading = false;
+    internal static MainWindow mw;
 
     public MainWindow()
     {
-      try
-      {
-        // DPI and sizing
-        var dpi = VisualTreeHelper.GetDpi(this);
-        System.Drawing.Rectangle resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-        var defaultHeight = resolution.Height * 0.75 / dpi.DpiScaleY;
-        var defaultWidth = resolution.Width * 0.85 / dpi.DpiScaleX;
-        Height = ConfigUtil.GetSettingAsDouble("WindowHeight", defaultHeight);
-        Width = ConfigUtil.GetSettingAsDouble("WindowWidth", defaultWidth);
+            mw = this;
+            try
+            {
+                // DPI and sizing
+                var dpi = VisualTreeHelper.GetDpi(this);
+                System.Drawing.Rectangle resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+                var defaultHeight = resolution.Height * 0.75 / dpi.DpiScaleY;
+                var defaultWidth = resolution.Width * 0.85 / dpi.DpiScaleX;
+                Height = ConfigUtil.GetSettingAsDouble("WindowHeight", defaultHeight);
+                Width = ConfigUtil.GetSettingAsDouble("WindowWidth", defaultWidth);
 
-        var top = ConfigUtil.GetSettingAsDouble("WindowTop", double.NaN);
-        var left = ConfigUtil.GetSettingAsDouble("WindowLeft", double.NaN);
-        if (top < 0 && left < 0)
-        {
-          top = 0;
-          left = 0;
-        }
+                var top = ConfigUtil.GetSettingAsDouble("WindowTop", double.NaN);
+                var left = ConfigUtil.GetSettingAsDouble("WindowLeft", double.NaN);
+                if (top < 0 && left < 0)
+                {
+                    top = 0;
+                    left = 0;
+                }
 
-        Top = top;
-        Left = left;
+                Top = top;
+                Left = left;
 
-        switch (ConfigUtil.GetSetting("WindowState", "Normal"))
-        {
-          case "Maximized":
-            WindowState = WindowState.Maximized;
-            break;
-          default:
-            WindowState = WindowState.Normal;
-            break;
-        }
+                switch (ConfigUtil.GetSetting("WindowState", "Normal"))
+                {
+                    case "Maximized":
+                        WindowState = WindowState.Maximized;
+                        break;
+                    default:
+                        WindowState = WindowState.Normal;
+                        break;
+                }
 
-        // load theme
-        CurrentTheme = ConfigUtil.GetSetting("CurrentTheme") ?? CurrentTheme;
-        MainActions.LoadTheme(this, CurrentTheme);
+                // load theme
+                CurrentTheme = ConfigUtil.GetSetting("CurrentTheme") ?? CurrentTheme;
+                MainActions.LoadTheme(this, CurrentTheme);
 
-        InitializeComponent();
-        // <syncfusion:NotifyIcon x:Name="notifyIcon" ShowInTaskBar="True" Header="NotifyIcon" Text="EQLogParser" Icon="EQLogParser.ico" Click="NotifyIcon_Click"/>
-        //NotifyIcon notifyIcon = new NotifyIcon();
-        //notifyIcon.Height = 80;
-        //notifyIcon.Width = 150;
-        //notifyIcon.ShowInTaskBar = true;
-        //notifyIcon.Text = "EQLogParser";
-        //notifyIcon.Icon = (ImageSource)new ImageSourceConverter().ConvertFromString("EQLogParser.ico");
-        //notifyIcon.Click += NotifyIcon_Click;
-        //notifyIcon.Header = "NotifyIcon";
-        //
-        //this.Content = notifyIcon;
+                InitializeComponent();
+                // <syncfusion:NotifyIcon x:Name="notifyIcon" ShowInTaskBar="True" Header="NotifyIcon" Text="EQLogParser" Icon="EQLogParser.ico" Click="NotifyIcon_Click"/>
+                //NotifyIcon notifyIcon = new NotifyIcon();
+                //notifyIcon.Height = 80;
+                //notifyIcon.Width = 150;
+                //notifyIcon.ShowInTaskBar = true;
+                //notifyIcon.Text = "EQLogParser";
+                //notifyIcon.Icon = (ImageSource)new ImageSourceConverter().ConvertFromString("EQLogParser.ico");
+                //notifyIcon.Click += NotifyIcon_Click;
+                //notifyIcon.Header = "NotifyIcon";
+                //
+                //this.Content = notifyIcon;
 
-        // add tabs to the right
-        ((DocumentContainer)dockSite.DocContainer).AddTabDocumentAtLast = true;
+                // add tabs to the right
+                ((DocumentContainer)dockSite.DocContainer).AddTabDocumentAtLast = true;
 
-        // update titles
-        versionText.Text = VERSION;
+                // update titles
+                versionText.Text = VERSION;
 
-        MainActions.InitPetOwners(this, petMappingGrid, ownerList, petMappingWindow);
-        MainActions.InitVerifiedPlayers(this, verifiedPlayersGrid, classList, verifiedPlayersWindow, petMappingWindow);
-        MainActions.InitVerifiedPets(this, verifiedPetsGrid, verifiedPetsWindow, petMappingWindow);
+                MainActions.InitPetOwners(this, petMappingGrid, ownerList, petMappingWindow);
+                MainActions.InitVerifiedPlayers(this, verifiedPlayersGrid, classList, verifiedPlayersWindow, petMappingWindow);
+                MainActions.InitVerifiedPets(this, verifiedPetsGrid, verifiedPetsWindow, petMappingWindow);
 
-        (npcWindow.Content as FightTable).EventsSelectionChange += (_, __) => ComputeStats();
-        DamageStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(damageChartIcon.Tag as string, data));
-        HealingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(healingChartIcon.Tag as string, data));
-        TankingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(tankingChartIcon.Tag as string, data));
+                (npcWindow.Content as FightTable).EventsSelectionChange += (_, __) => ComputeStats();
+                DamageStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(damageChartIcon.Tag as string, data));
+                HealingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(healingChartIcon.Tag as string, data));
+                TankingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(tankingChartIcon.Tag as string, data));
 
-        UpdateDeleteChatMenu();
+                UpdateDeleteChatMenu();
 
-        // Ignore Charm Pets
-        IsIgnoreCharmPetsEnabled = ConfigUtil.IfSet("IgnoreCharmPets");
-        ignoreCharmPetsIcon.Visibility = IsIgnoreCharmPetsEnabled ? Visibility.Visible : Visibility.Hidden;
+                // Ignore Charm Pets
+                IsIgnoreCharmPetsEnabled = ConfigUtil.IfSet("IgnoreCharmPets");
+                ignoreCharmPetsIcon.Visibility = IsIgnoreCharmPetsEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // AoE healing
-        IsAoEHealingEnabled = ConfigUtil.IfSetOrElse("IncludeAoEHealing", IsAoEHealingEnabled);
-        enableAoEHealingIcon.Visibility = IsAoEHealingEnabled ? Visibility.Visible : Visibility.Hidden;
+                // AoE healing
+                IsAoEHealingEnabled = ConfigUtil.IfSetOrElse("IncludeAoEHealing", IsAoEHealingEnabled);
+                enableAoEHealingIcon.Visibility = IsAoEHealingEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // Assassinate Damage
-        IsAssassinateDamageEnabled = ConfigUtil.IfSetOrElse("IncludeAssassinateDamage", IsAssassinateDamageEnabled);
-        enableAssassinateDamageIcon.Visibility = IsAssassinateDamageEnabled ? Visibility.Visible : Visibility.Hidden;
+                // Assassinate Damage
+                IsAssassinateDamageEnabled = ConfigUtil.IfSetOrElse("IncludeAssassinateDamage", IsAssassinateDamageEnabled);
+                enableAssassinateDamageIcon.Visibility = IsAssassinateDamageEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // Bane Damage
-        IsBaneDamageEnabled = ConfigUtil.IfSetOrElse("IncludeBaneDamage", IsBaneDamageEnabled);
-        enableBaneDamageIcon.Visibility = IsBaneDamageEnabled ? Visibility.Visible : Visibility.Hidden;
+                // Bane Damage
+                IsBaneDamageEnabled = ConfigUtil.IfSetOrElse("IncludeBaneDamage", IsBaneDamageEnabled);
+                enableBaneDamageIcon.Visibility = IsBaneDamageEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // Finishing Blow Damage
-        IsFinishingBlowDamageEnabled = ConfigUtil.IfSetOrElse("IncludeFinishingBlowDamage", IsFinishingBlowDamageEnabled);
-        enableFinishingBlowDamageIcon.Visibility = IsFinishingBlowDamageEnabled ? Visibility.Visible : Visibility.Hidden;
+                // Finishing Blow Damage
+                IsFinishingBlowDamageEnabled = ConfigUtil.IfSetOrElse("IncludeFinishingBlowDamage", IsFinishingBlowDamageEnabled);
+                enableFinishingBlowDamageIcon.Visibility = IsFinishingBlowDamageEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // Headshot Damage
-        IsHeadshotDamageEnabled = ConfigUtil.IfSetOrElse("IncludeHeadshotDamage", IsHeadshotDamageEnabled);
-        enableHeadshotDamageIcon.Visibility = IsHeadshotDamageEnabled ? Visibility.Visible : Visibility.Hidden;
+                // Headshot Damage
+                IsHeadshotDamageEnabled = ConfigUtil.IfSetOrElse("IncludeHeadshotDamage", IsHeadshotDamageEnabled);
+                enableHeadshotDamageIcon.Visibility = IsHeadshotDamageEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // Slay Undead Damage
-        IsSlayUndeadDamageEnabled = ConfigUtil.IfSetOrElse("IncludeSlayUndeadDamage", IsSlayUndeadDamageEnabled);
-        enableSlayUndeadDamageIcon.Visibility = IsSlayUndeadDamageEnabled ? Visibility.Visible : Visibility.Hidden;
+                // Slay Undead Damage
+                IsSlayUndeadDamageEnabled = ConfigUtil.IfSetOrElse("IncludeSlayUndeadDamage", IsSlayUndeadDamageEnabled);
+                enableSlayUndeadDamageIcon.Visibility = IsSlayUndeadDamageEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // Hide window when minimized
-        IsHideOnMinimizeEnabled = ConfigUtil.IfSet("HideWindowOnMinimize");
-        enableHideOnMinimizeIcon.Visibility = IsHideOnMinimizeEnabled ? Visibility.Visible : Visibility.Hidden;
+                // Hide window when minimized
+                IsHideOnMinimizeEnabled = ConfigUtil.IfSet("HideWindowOnMinimize");
+                enableHideOnMinimizeIcon.Visibility = IsHideOnMinimizeEnabled ? Visibility.Visible : Visibility.Hidden;
 
-        // Damage Overlay
-        enableDamageOverlayIcon.Visibility = OverlayUtil.LoadSettings() ? Visibility.Visible : Visibility.Hidden;
+                // Damage Overlay
+                enableDamageOverlayIcon.Visibility = OverlayUtil.LoadSettings() ? Visibility.Visible : Visibility.Hidden;
 
-        LOG.Info("Initialized Components");
+                LOG.Info("Initialized Components");
 
-        if (ConfigUtil.IfSet("AutoMonitor"))
-        {
-          enableAutoMonitorIcon.Visibility = Visibility.Visible;
-          var previousFile = ConfigUtil.GetSetting("LastOpenedFile");
-          if (File.Exists(previousFile))
-          {
-            OpenLogFile(LogOption.MONITOR, previousFile);
-          }
-        }
-        else
-        {
-          enableAutoMonitorIcon.Visibility = Visibility.Hidden;
-        }
+                if (ConfigUtil.IfSet("AutoMonitor"))
+                {
+                    enableAutoMonitorIcon.Visibility = Visibility.Visible;
+                    var previousFile = ConfigUtil.GetSetting("LastOpenedFile");
+                    if (File.Exists(previousFile))
+                    {
+                        OpenLogFile(LogOption.MONITOR, previousFile);
+                    }
+                }
+                else
+                {
+                    enableAutoMonitorIcon.Visibility = Visibility.Hidden;
+                }
 
-        ComputeStatsTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 500) };
-        ComputeStatsTimer.Tick += (sender, e) =>
-        {
-          ComputeStats();
-          ComputeStatsTimer.Stop();
-        };
+                ComputeStatsTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 500) };
+                ComputeStatsTimer.Tick += (sender, e) =>
+                {
+                    ComputeStats();
+                    ComputeStatsTimer.Stop();
+                };
 
-        DockingManager.SetState(petMappingWindow, DockState.AutoHidden);
+                DockingManager.SetState(petMappingWindow, DockState.AutoHidden);
 
-        if (ConfigUtil.IfSet("Debug"))
-        {
-          LOG.Info("Debug Enabled. Saving Unprocessed Lines to " + ConfigUtil.LogsDir);
-          ConfigUtil.Debug = true;
-          ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).Root.Level = Level.Debug;
-          ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
-        }
-      }
-      catch (Exception e)
-      {
-        LOG.Error(e);
-        throw;
-      }
+                if (ConfigUtil.IfSet("Debug"))
+                {
+                    LOG.Info("Debug Enabled. Saving Unprocessed Lines to " + ConfigUtil.LogsDir);
+                    ConfigUtil.Debug = true;
+                    ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).Root.Level = Level.Debug;
+                    ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
+                }
+            }
+            catch (Exception e)
+            {
+                LOG.Error(e);
+                throw;
+            }
+            finally {
+                App.Splash.Hide();
+            }
     }
 
     internal void CopyToEQClick(string type) => (playerParseTextWindow.Content as ParsePreview)?.CopyToEQClick(type);
