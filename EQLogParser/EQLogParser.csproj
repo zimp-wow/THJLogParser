@@ -156,6 +156,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="src\dao\SpellDict.cs" />
+    <Compile Remove="src\dao\SpellDict_Old.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="..\Dependencies\Hardcodet.Wpf.TaskbarNotification.dll" />
   </ItemGroup>
   <ItemGroup>
