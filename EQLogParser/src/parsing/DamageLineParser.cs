@@ -664,7 +664,7 @@ namespace EQLogParser
       }
       catch (Exception e)
       {
-        LOG.Error(e);
+        LOG.Error(lineData?.FullLine, e);
       }
     }
 

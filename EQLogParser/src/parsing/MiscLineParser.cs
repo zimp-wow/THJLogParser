@@ -267,19 +267,19 @@ namespace EQLogParser
       }
       catch (ArgumentNullException ne)
       {
-        LOG.Error(ne);
+        LOG.Error(lineData?.FullLine, ne);
       }
       catch (NullReferenceException nr)
       {
-        LOG.Error(nr);
+        LOG.Error(lineData?.FullLine, nr);
       }
       catch (ArgumentOutOfRangeException aor)
       {
-        LOG.Error(aor);
+        LOG.Error(lineData?.FullLine, aor);
       }
       catch (ArgumentException ae)
       {
-        LOG.Error(ae);
+        LOG.Error(lineData?.FullLine, ae);
       }
     }
 

@@ -191,6 +191,7 @@ namespace EQLogParser
 
   internal class LineData
   {
+    public string FullLine { get; set; }
     public string Action { get; set; }
     public double BeginTime { get; set; }
     public long LineNumber { get; set; }
