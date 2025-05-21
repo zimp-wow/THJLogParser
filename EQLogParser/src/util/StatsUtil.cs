@@ -398,76 +398,76 @@ namespace EQLogParser
     {
       if (stats.Hits > 0)
       {
-        stats.DPS  = (long)Math.Round(stats.Total / stats.TotalSeconds, 2);
-        stats.SDPS = (long)Math.Round(stats.Total / raidStats.TotalSeconds, 2);
+        stats.SDPS  = (long)Math.Round(stats.Total / stats.TotalSeconds, 2);
+        stats.DPS = (long)Math.Round(stats.Total / raidStats.TotalSeconds, 2);
         // Xan - trick the parser into showing rates for only potential healing (ex. runes)
         if( stats.Total == 0 && stats.Extra > 0 && stats.Type == Labels.RUNE )
         {
-            stats.DPS  = (long)Math.Round(stats.Extra / stats.TotalSeconds, 2);
-            stats.SDPS = (long)Math.Round(stats.Extra / raidStats.TotalSeconds, 2);
+            stats.SDPS  = (long)Math.Round(stats.Extra / stats.TotalSeconds, 2);
+            stats.DPS = (long)Math.Round(stats.Extra / raidStats.TotalSeconds, 2);
         }
-
+    
         stats.Avg = (long)Math.Round(Convert.ToDecimal(stats.Total) / stats.Hits, 2);
         stats.Potential = stats.Total + stats.Extra;
-
+    
         if ((stats.CritHits - stats.LuckyHits) is uint nonLucky && nonLucky > 0)
         {
           stats.AvgCrit = (long)Math.Round(Convert.ToDecimal(stats.TotalCrit) / nonLucky, 2);
         }
-
+    
         if (stats.LuckyHits > 0)
         {
           stats.AvgLucky = (long)Math.Round(Convert.ToDecimal(stats.TotalLucky) / stats.LuckyHits, 2);
         }
-
+    
         if (stats.NonTwincastCritHits > 0)
         {
           stats.AvgNonTwincastCrit = (long)Math.Round(Convert.ToDecimal(stats.TotalNonTwincastCrit) / stats.NonTwincastCritHits, 2);
         }
-
+    
         if (stats.NonTwincastLuckyHits > 0)
         {
           stats.AvgNonTwincastLucky = (long)Math.Round(Convert.ToDecimal(stats.TotalNonTwincastLucky) / stats.NonTwincastLuckyHits, 2);
         }
-
+    
         if (stats.Total > 0)
         {
           stats.ExtraRate = (float)Math.Round((float)stats.Extra / stats.Total * 100, 2);
         }
-
+    
         if ((stats.Hits - stats.TwincastHits) is uint nonTwincast && nonTwincast > 0)
         {
           stats.AvgNonTwincast = (long)Math.Round(Convert.ToDecimal(stats.TotalNonTwincast) / nonTwincast, 2);
         }
-
+    
         stats.CritRate = (float)Math.Round((float)stats.CritHits / stats.Hits * 100, 2);
         stats.LuckRate = (float)Math.Round((float)stats.LuckyHits / stats.Hits * 100, 2);
-
+    
         // All Regular Melee Hits are MeleeHits but not the reverse
         if (stats.RegularMeleeHits > 0)
         {
           stats.FlurryRate = (float)Math.Round((float)stats.FlurryHits / stats.RegularMeleeHits * 100, 2);
         }
-
+    
         if (stats.MeleeHits > 0)
         {
           stats.RiposteRate = (float)Math.Round((float)stats.RiposteHits / stats.MeleeHits * 100, 2);
           stats.RampageRate = (float)Math.Round((float)stats.RampageHits / stats.MeleeHits * 100, 2);
         }
-
+    
         if (stats.BowHits > 0)
         {
           stats.DoubleBowRate = (float)Math.Round((float)stats.DoubleBowHits / stats.BowHits * 100, 2);
         }
-
+    
         if (stats.MeleeAttempts > 0)
         {
           stats.MeleeHitRate = (float)Math.Round((float)stats.MeleeHits / stats.MeleeAttempts * 100, 2);
           stats.MeleeAccRate = (float)Math.Round((float)stats.MeleeHits / (stats.MeleeAttempts - stats.Parries - stats.Dodges - stats.Blocks - stats.Invulnerable - stats.Absorbs) * 100, 2);
         }
-
+    
         stats.MeleeUndefended = stats.MeleeHits - stats.StrikethroughHits;
-
+    
         if (stats.SpellHits > 0)
         {
           var tcMult = stats.Type == Labels.DD ? 2 : 1;
@@ -475,15 +475,15 @@ namespace EQLogParser
           stats.TwincastRate = (float)(stats.TwincastRate > 100.0 ? 100.0 : stats.TwincastRate);
           stats.ResistRate = (float)Math.Round((float)stats.Resists / (stats.SpellHits + stats.Resists) * 100, 2);
         }
-
+    
         if (superStats != null && superStats.Total > 0)
         {
           stats.Percent = (float)Math.Round(superStats.Percent / 100 * ((float)stats.Total / superStats.Total) * 100, 2);
-          stats.SDPS = (long)Math.Round(stats.Total / superStats.TotalSeconds, 2);
+          stats.DPS = (long)Math.Round(stats.Total / superStats.TotalSeconds, 2);
         }
         else if (superStats == null)
         {
-          stats.SDPS = (long)Math.Round(stats.Total / raidStats.TotalSeconds, 2);
+          stats.DPS = (long)Math.Round(stats.Total / raidStats.TotalSeconds, 2);
         }
       }
     }
