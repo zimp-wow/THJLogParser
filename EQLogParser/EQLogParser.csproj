@@ -147,7 +147,7 @@
     <Resource Include="icons\Clr.png" />
     <Resource Include="icons\Ber.png" />
     <Resource Include="icons\Wiz.png" />
-    <Resource Include="src\ui\main\EQLogParser.ico" />
+    <Resource Include="src\ui\main\Logparsericon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\**">

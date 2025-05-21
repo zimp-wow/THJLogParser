@@ -9,7 +9,7 @@
     <WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="background.bmp" />
 
-    <Icon Id="icon.ico" SourceFile="$(var.EQLogParser.ProjectDir)\src\ui\main\EQLogParser.ico"/>
+    <Icon Id="icon.ico" SourceFile="$(var.EQLogParser.ProjectDir)\src\ui\main\Logparsericon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="icon.ico" />
     <Property Id="DOTNET6INSTALLED">0</Property>
 
@@ -116,14 +116,14 @@
     </Directory>
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Win64="yes" Id="ApplicationShortcut" Guid="7D5D3FA6-1F71-411B-A1F0-EF477E38B3ED">
-        <Shortcut Id="ApplicationStartMenuShortcut" Name="EQ Log Parser" Description="Everquest Log Parser" Target="[INSTALLFOLDER]\EQLogParser.exe" WorkingDirectory="INSTALLFOLDER" />
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="THJ Log Parser" Description="THJ Log Parser" Target="[INSTALLFOLDER]\EQLogParser.exe" WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall" />
         <RegistryValue Root="HKCU" Key="Software\Kizant\EQLogParser" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </DirectoryRef>
     <DirectoryRef Id="DesktopFolder">
       <Component Win64="yes" Id="ApplicationShortcutDesktop" Guid="969EAC06-8AFD-48A9-814C-ADBE6F7C073E">
-        <Shortcut Id="ApplicationDesktopShortcut" Name="EQ Log Parser" Icon="icon.ico" Description="Everquest Log Parser" Target="[INSTALLFOLDER]\EQLogParser.exe" WorkingDirectory="INSTALLFOLDER" />
+        <Shortcut Id="ApplicationDesktopShortcut" Name="THJ Log Parser" Icon="icon.ico" Description="THJ Log Parser" Target="[INSTALLFOLDER]\EQLogParser.exe" WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="CleanUpDesktopShortCut" Directory="DesktopFolder" On="uninstall" />
         <RegistryValue Root="HKCU" Key="Software\Kizant\EQLogParser" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>

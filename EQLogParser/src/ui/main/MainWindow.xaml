@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EQLogParser"
         xmlns:listCollection="clr-namespace:System.Collections;assembly=mscorlib"
         x:Class="EQLogParser.MainWindow"
-        Icon="EQLogParser.ico"
+        Icon="Logparsericon.ico"
         Title="EQLogParser"
         Closed="WindowClosed"
         ResizeMode="CanResize"
