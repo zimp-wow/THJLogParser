@@ -192,6 +192,10 @@
   <data name="NPC_SEARCH_TEXT" xml:space="preserve">
     <value>FIght/NPC Search</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="oldspells" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\oldspells.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="PAL" xml:space="preserve">
     <value>Paladin</value>
   </data>
@@ -221,6 +225,9 @@
   </data>
   <data name="SHM" xml:space="preserve">
     <value>Shaman</value>
+  </data>
+  <data name="spells" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\spells.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SPELL_TYPES_SELECTED" xml:space="preserve">
     <value>Spell Types</value>

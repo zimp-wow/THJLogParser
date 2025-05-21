@@ -286,6 +286,16 @@ namespace EQLogParser {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] oldspells {
+            get {
+                object obj = ResourceManager.GetObject("oldspells", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paladin.
         /// </summary>
         internal static string PAL {
@@ -381,6 +391,16 @@ namespace EQLogParser {
         internal static string SPELL_TYPES_SELECTED {
             get {
                 return ResourceManager.GetString("SPELL_TYPES_SELECTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] spells {
+            get {
+                object obj = ResourceManager.GetObject("spells", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

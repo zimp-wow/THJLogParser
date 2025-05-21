@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Syncfusion.XPS;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Security;
 
 namespace EQLogParser
@@ -194,6 +196,38 @@ namespace EQLogParser
 
         LoadProperties(ApplicationSettings, ReadList(SettingsFile));
       }
+    }
+
+    internal static List<string> ReadEmbeddedList(byte[] resource)
+    {
+      
+      List<string> result = new List<string>();
+      try
+      {
+          using (var _textStreamReader = new StreamReader(new MemoryStream(resource)))
+          {
+              var line = _textStreamReader.ReadLine();
+              while (line != null) {
+                  result.Add(line);
+                  line = _textStreamReader.ReadLine();
+              }
+
+          }
+      }
+      catch (IOException ex)
+      {
+        LOG.Error(ex);
+      }
+      catch (UnauthorizedAccessException uax)
+      {
+        LOG.Error(uax);
+      }
+      catch (SecurityException se)
+      {
+        LOG.Error(se);
+      }
+
+      return result;
     }
 
     internal static List<string> ReadList(string fileName)

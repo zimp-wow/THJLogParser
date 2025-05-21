@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using EQLogParser.src.dao;
 using Syncfusion.Windows.Shared;
 using Windows.ApplicationModel.Store;
 
@@ -154,14 +153,10 @@ namespace EQLogParser
       });
 
       // Old Spell cache (EQEMU)
-      //ConfigUtil.ReadList(@"data\oldspells.txt").ForEach(line => OldSpellNamesDB[line] = true);
-      SpellDict_Old.SpellList.ForEach(line => OldSpellNamesDB[line] = true);
+      ConfigUtil.ReadEmbeddedList(EQLogParser.Resource.oldspells).ForEach(line => OldSpellNamesDB[line] = true);
 
             // Xan - try to open a real spell list first in local folder
-            //List<string>  sd  = ConfigUtil.ReadList(@"data\spells_us.txt");
-            //if( sd == null || sd.Count == 0 )
-            //  sd  = ConfigUtil.ReadList(@"data\spells.txt");
-            List<string> sd = SpellDict.SpellList.Select(s => s.ToString()).ToList();
+      List<string>  sd  = ConfigUtil.ReadEmbeddedList(EQLogParser.Resource.spells);
       sd.ForEach(line =>
       {
         try
