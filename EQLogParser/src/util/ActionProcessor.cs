@@ -8,9 +8,8 @@ namespace EQLogParser
   class ActionProcessor
   {
     public delegate void ProcessActionCallback(LineData data);
-    private List<LineData> Queue = new List<LineData>();
-    private List<LineData> temp = null;
-    private readonly object QueueLock = new object();
+    private ConcurrentQueue<LineData> Queue = null;
+    ManualResetEventSlim StopFlag = new ManualResetEventSlim(false);
     private readonly ProcessActionCallback callback;
     private bool Stopped = false;
     private readonly int DelayTime = 10;
@@ -19,32 +18,30 @@ namespace EQLogParser
 
     public ActionProcessor(ProcessActionCallback callback)
     {
+      this.Queue = new ConcurrentQueue<LineData>();
       this.callback = callback;
-      Task.Run(() => Process());
+      Thread t = new Thread(() => Process());
+      t.IsBackground = true;
+      t.Start();
     }
 
     public void Add(LineData data)
     {
-      lock (QueueLock)
-      {
-        Queue.Add(data);
+        Queue.Enqueue(data);
         LinesAdded++;
-      }
     }
 
     public long Size()
     {
-      long count = 0;
-      lock (QueueLock)
-      {
-        count = Queue.Count;
-      }
-      return count;
+      return Queue.Count;
     }
 
     public void Stop()
     {
+      StopFlag.Reset();
       Stopped = true;
+      StopFlag.Wait();
+      this.Queue.Dispose();
     }
 
     public double GetPercentComplete()
@@ -56,39 +53,17 @@ namespace EQLogParser
     {
       while (!Stopped)
       {
-        bool needSleep = false;
-
-        lock (QueueLock)
-        {
-          if (Queue.Count > 0)
-          {
-            temp = Queue;
-            Queue = new List<LineData>();
-          }
-          else
-          {
-            needSleep = true;
-          }
-        }
-
-        if (needSleep)
-        {
-          Thread.Sleep(DelayTime);
-        }
-        else if (temp != null)
-        {
-          foreach (var item in temp)
-          {
-            if (Stopped)
-            {
-              break;
-            }
-
+        LineData item = null;
+        if (Queue.TryDequeue(ref item)){
             callback(item);
             LinesProcessed++;
-          }
+        }
+        else
+        {
+            Thread.Sleep(DelayTime);
         }
       }
+        StopFlag.Set();
     }
   }
 }
