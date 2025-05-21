@@ -19,8 +19,8 @@ namespace EQLogParser
     {
       InitializeComponent();
 
-      (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete += LogLoadingComplete;
-      (Application.Current.MainWindow as MainWindow).GetFightTable().EventsSelectionChange += SelectionChange;
+      MainWindow.mw.EventsLogLoadingComplete += LogLoadingComplete;
+            MainWindow.mw.GetFightTable().EventsSelectionChange += SelectionChange;
       dataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName = "Taunt", SortDirection = ListSortDirection.Descending });
 
       // default these columns to descending
@@ -56,8 +56,8 @@ namespace EQLogParser
     {
       var totals = new Dictionary<string, dynamic>();
       var childTotals = new Dictionary<string, dynamic>();
-      var fights = fightOption.SelectedIndex == 0 ? (Application.Current.MainWindow as MainWindow).GetFightTable()?.GetFights() :
-  (Application.Current.MainWindow as MainWindow).GetFightTable()?.GetSelectedFights();
+      var fights = fightOption.SelectedIndex == 0 ? MainWindow.mw.GetFightTable()?.GetFights() :
+  MainWindow.mw.GetFightTable()?.GetSelectedFights();
 
       foreach (var fight in fights)
       {
@@ -138,8 +138,8 @@ namespace EQLogParser
     {
       if (!disposedValue)
       {
-        (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete -= LogLoadingComplete;
-        (Application.Current.MainWindow as MainWindow).GetFightTable().EventsSelectionChange -= SelectionChange;
+        MainWindow.mw.EventsLogLoadingComplete -= LogLoadingComplete;
+        MainWindow.mw.GetFightTable().EventsSelectionChange -= SelectionChange;
         dataGrid.Dispose();
         disposedValue = true;
       }

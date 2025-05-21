@@ -34,8 +34,8 @@ namespace EQLogParser
       Types.Add(Labels.DOT);
       typeList.SelectedIndex = 0;
 
-      (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete += LogLoadingComplete;
-      (Application.Current.MainWindow as MainWindow).GetFightTable().EventsSelectionChange += SelectionChange;
+      MainWindow.mw.EventsLogLoadingComplete += LogLoadingComplete;
+      MainWindow.mw.GetFightTable().EventsSelectionChange += SelectionChange;
 
       // default these columns to descending
       string[] desc = new string[] { "Avg", "Max", "Total", "Hits" };
@@ -73,8 +73,8 @@ namespace EQLogParser
       var uniqueSpells = new Dictionary<string, byte>();
       var uniquePlayers = new Dictionary<string, byte>();
 
-      var fights = fightOption.SelectedIndex == 0 ? (Application.Current.MainWindow as MainWindow).GetFightTable()?.GetFights() :
-        (Application.Current.MainWindow as MainWindow).GetFightTable()?.GetSelectedFights();
+      var fights = fightOption.SelectedIndex == 0 ? MainWindow.mw.GetFightTable()?.GetFights() :
+        MainWindow.mw.GetFightTable()?.GetSelectedFights();
 
       foreach (var fight in fights)
       {
@@ -209,8 +209,8 @@ namespace EQLogParser
     {
       if (!disposedValue)
       {
-        (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete -= LogLoadingComplete;
-        (Application.Current.MainWindow as MainWindow).GetFightTable().EventsSelectionChange -= SelectionChange;
+        MainWindow.mw.EventsLogLoadingComplete -= LogLoadingComplete;
+        MainWindow.mw.GetFightTable().EventsSelectionChange -= SelectionChange;
         dataGrid.Dispose();
         disposedValue = true;
       }

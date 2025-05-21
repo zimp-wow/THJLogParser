@@ -194,7 +194,7 @@ namespace EQLogParser
         {
             if (selected?.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl spellTable, typeof(SpellCastTable),
                   "spellCastsWindow", "Spell Cast Timeline"))
                 {
@@ -207,7 +207,7 @@ namespace EQLogParser
         {
             if (selected?.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl spellTable, typeof(SpellCountTable),
                   "spellCountsWindow", "Spell Counts"))
                 {

@@ -38,7 +38,7 @@ namespace EQLogParser
       string[] desc = new string[] { "Quantity", "Time" };
       dataGrid.SortColumnsChanging += (object s, GridSortColumnsChangingEventArgs e) => DataGridUtil.SortColumnsChanging(s, e, desc);
       dataGrid.SortColumnsChanged += (object s, GridSortColumnsChangedEventArgs e) => DataGridUtil.SortColumnsChanged(s, e, desc);
-      (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete += EventsLogLoadingComplete;
+      MainWindow.mw.EventsLogLoadingComplete += EventsLogLoadingComplete;
 
       Load();
       dataGrid.ItemsSource = IndividualRecords;
@@ -237,7 +237,7 @@ namespace EQLogParser
     {
       if (!disposedValue)
       {
-        (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete -= EventsLogLoadingComplete;
+        MainWindow.mw.EventsLogLoadingComplete -= EventsLogLoadingComplete;
         dataGrid.Dispose();
         disposedValue = true;
       }

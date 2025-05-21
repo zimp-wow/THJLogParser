@@ -62,7 +62,7 @@ namespace EQLogParser
         {
             if (selected?.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl breakdown, typeof(TankingBreakdown),
                   "tankingBreakdownWindow", "Tanking Breakdown"))
                 {
@@ -75,7 +75,7 @@ namespace EQLogParser
         {
             if (selected?.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl breakdown, typeof(HealBreakdown),
                   "receivedHealingWindow", "Received Healing Breakdown"))
                 {
@@ -127,8 +127,8 @@ namespace EQLogParser
             });
         }
 
-        private void CopyToEQClick(object sender, RoutedEventArgs e) => (Application.Current.MainWindow as MainWindow).CopyToEQClick(Labels.TANKPARSE);
-        private void CopyReceivedHealingToEQClick(object sender, RoutedEventArgs e) => (Application.Current.MainWindow as MainWindow).CopyToEQClick(Labels.RECEIVEDHEALPARSE);
+        private void CopyToEQClick(object sender, RoutedEventArgs e) => MainWindow.mw.CopyToEQClick(Labels.TANKPARSE);
+        private void CopyReceivedHealingToEQClick(object sender, RoutedEventArgs e) => MainWindow.mw.CopyToEQClick(Labels.RECEIVEDHEALPARSE);
         private void DataGridSelectionChanged(object sender, GridSelectionChangedEventArgs e) => DataGridSelectionChanged();
 
         private void ClassSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -171,7 +171,7 @@ namespace EQLogParser
         {
             if (dataGrid.SelectedItems?.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl log, typeof(HitLogViewer), "tankingLogWindow", "Tanking Log"))
                 {
                     (log.Content as HitLogViewer).Init(CurrentStats, dataGrid.SelectedItems.Cast<PlayerStats>().First(), CurrentGroups, true);
@@ -183,7 +183,7 @@ namespace EQLogParser
         {
             if (dataGrid.SelectedItems.Count == 1)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl hitFreq, typeof(HitFreqChart), "tankHitFreqChart", "Tanking Hit Frequency"))
                 {
                     (hitFreq.Content as HitFreqChart).Update(dataGrid.SelectedItems.Cast<PlayerStats>().First(), CurrentStats);
@@ -195,7 +195,7 @@ namespace EQLogParser
         {
             if (dataGrid.SelectedItems.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl timeline, typeof(GanttChart), "defensiveTimeline", "Defensive Timeline"))
                 {
                     ((GanttChart)timeline.Content).Init(CurrentStats, dataGrid.SelectedItems.Cast<PlayerStats>().ToList(), CurrentGroups, true);

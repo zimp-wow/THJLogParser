@@ -44,7 +44,7 @@ namespace EQLogParser
       selectedSpellRestrictions.ItemsSource = list;
       UpdateRestrictionsTitle(selectedSpellRestrictions);
 
-      (Application.Current.MainWindow as MainWindow).EventsThemeChanged += EventsThemeChanged;
+      MainWindow.mw.EventsThemeChanged += EventsThemeChanged;
     }
 
     protected void CopyCsvClick(object sender, RoutedEventArgs e) => DataGridUtil.CopyCsvFromTable(TheDataGrid, TheTitleLabel.Content.ToString());
@@ -207,7 +207,7 @@ namespace EQLogParser
     {
       if (!disposedValue)
       {
-        (Application.Current.MainWindow as MainWindow).EventsThemeChanged -= EventsThemeChanged;
+        MainWindow.mw.EventsThemeChanged -= EventsThemeChanged;
         TheDataGrid?.Dispose();
         disposedValue = true;
       }

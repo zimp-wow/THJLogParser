@@ -21,7 +21,7 @@ namespace EQLogParser
     public RandomViewer()
     {
       InitializeComponent();
-      (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete += LogLoadingComplete;
+      MainWindow.mw.EventsLogLoadingComplete += LogLoadingComplete;
       DataManager.Instance.EventsNewRandomRecord += EventsNewRandomRecord;
 
       Load();
@@ -242,7 +242,7 @@ namespace EQLogParser
       if (!disposedValue)
       {
         ReloadTimer?.Stop();
-        (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete -= LogLoadingComplete;
+        MainWindow.mw.EventsLogLoadingComplete -= LogLoadingComplete;
         DataManager.Instance.EventsNewRandomRecord -= EventsNewRandomRecord;
         dataGrid.Dispose();
         disposedValue = true;

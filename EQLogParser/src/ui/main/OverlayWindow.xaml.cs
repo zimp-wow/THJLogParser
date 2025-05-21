@@ -202,7 +202,7 @@ namespace EQLogParser
         {
           lock (StatsLock)
           {
-            (Application.Current.MainWindow as MainWindow)?.AddAndCopyDamageParse(Stats, Stats.StatsList);
+                MainWindow.mw?.AddAndCopyDamageParse(Stats, Stats.StatsList);
           }
         };
 

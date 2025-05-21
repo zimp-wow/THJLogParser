@@ -72,7 +72,7 @@ namespace EQLogParser
       Ready = true;
       ChatManager.EventsUpdatePlayer += ChatManagerEventsUpdatePlayer;
       ChatManager.EventsNewChannels += ChatManagerEventsNewChannels;
-      (Application.Current.MainWindow as MainWindow).EventsThemeChanged += EventsThemeChanged;
+      MainWindow.mw.EventsThemeChanged += EventsThemeChanged;
       Task.Delay(500).ContinueWith(task => Dispatcher.InvokeAsync(() => ChangeSearch()));
     }
 
@@ -484,7 +484,7 @@ namespace EQLogParser
     {
       if (!disposedValue)
       {
-        (Application.Current.MainWindow as MainWindow).EventsThemeChanged -= EventsThemeChanged;
+        MainWindow.mw.EventsThemeChanged -= EventsThemeChanged;
         ChatManager.EventsUpdatePlayer -= ChatManagerEventsUpdatePlayer;
         ChatManager.EventsNewChannels -= ChatManagerEventsNewChannels;
 

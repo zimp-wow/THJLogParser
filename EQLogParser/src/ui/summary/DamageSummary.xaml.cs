@@ -72,7 +72,7 @@ namespace EQLogParser
         {
             if (selected?.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl breakdown, typeof(DamageBreakdown),
                   "damageBreakdownWindow", "Damage Breakdown"))
                 {
@@ -116,7 +116,7 @@ namespace EQLogParser
             });
         }
 
-        private void CopyToEQClick(object sender, RoutedEventArgs e) => (Application.Current.MainWindow as MainWindow).CopyToEQClick(Labels.DAMAGEPARSE);
+        private void CopyToEQClick(object sender, RoutedEventArgs e) => MainWindow.mw.CopyToEQClick(Labels.DAMAGEPARSE);
         internal override bool IsPetsCombined() => CurrentPetOrPlayerOption == 0;
         private void DataGridSelectionChanged(object sender, GridSelectionChangedEventArgs e) => DataGridSelectionChanged();
 
@@ -205,7 +205,7 @@ namespace EQLogParser
         {
             if (dataGrid.SelectedItems?.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl log, typeof(HitLogViewer), "damageLogWindow", "Damage Log"))
                 {
                     (log.Content as HitLogViewer).Init(CurrentStats, dataGrid.SelectedItems.Cast<PlayerStats>().First(), CurrentGroups);
@@ -217,7 +217,7 @@ namespace EQLogParser
         {
             if (dataGrid.SelectedItems.Count == 1)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl hitFreq, typeof(HitFreqChart), "damageFreqChart", "Damage Hit Frequency"))
                 {
                     (hitFreq.Content as HitFreqChart).Update(dataGrid.SelectedItems.Cast<PlayerStats>().First(), CurrentStats);
@@ -229,7 +229,7 @@ namespace EQLogParser
         {
             if (dataGrid.SelectedItems.Count > 0)
             {
-                var main = Application.Current.MainWindow as MainWindow;
+                var main = MainWindow.mw;
                 if (Helpers.OpenWindow(main.dockSite, null, out ContentControl timeline, typeof(GanttChart), "adpsTimeline", "ADPS Timeline"))
                 {
                     ((GanttChart)timeline.Content).Init(CurrentStats, dataGrid.SelectedItems.Cast<PlayerStats>().ToList(), CurrentGroups);
