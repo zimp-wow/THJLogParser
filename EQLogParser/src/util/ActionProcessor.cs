@@ -62,8 +62,8 @@ namespace EQLogParser
         {
             Thread.Sleep(DelayTime);
         }
-        StopFlag.Set();
       }
+        StopFlag.Set();
     }
   }
 }
