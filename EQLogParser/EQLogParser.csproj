@@ -148,6 +148,7 @@
     <Resource Include="icons\Ber.png" />
     <Resource Include="icons\Wiz.png" />
     <Resource Include="src\ui\main\Logparsericon.ico" />
+    <Resource Include="src\ui\main\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\**">
