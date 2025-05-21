@@ -66,7 +66,7 @@ namespace EQLogParser
         FilterTimer.Stop();
       };
 
-      (Application.Current.MainWindow as MainWindow).EventsThemeChanged += EventsThemeChanged;
+      MainWindow.mw.EventsThemeChanged += EventsThemeChanged;
     }
 
     private void EventsThemeChanged(object sender, string e) => UpdateCurrentTextColor();
@@ -623,7 +623,7 @@ namespace EQLogParser
     {
       if (!disposedValue)
       {
-        (Application.Current.MainWindow as MainWindow).EventsThemeChanged -= EventsThemeChanged;
+        MainWindow.mw.EventsThemeChanged -= EventsThemeChanged;
         logBox.Dispose();
         contextBox.Dispose();
         tabControl.Dispose();

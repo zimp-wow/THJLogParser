@@ -37,7 +37,7 @@ namespace EQLogParser
     {
       if (selected?.Count > 0)
       {
-        var main = Application.Current.MainWindow as MainWindow;
+        var main = MainWindow.mw;
         if (Helpers.OpenWindow(main.dockSite, null, out ContentControl breakdown, typeof(HealBreakdown),
           "healingBreakdownWindow", "Healing Breakdown"))
         {
@@ -68,8 +68,8 @@ namespace EQLogParser
       });
     }
 
-    private void CopyToEQClick(object sender, RoutedEventArgs e) => (Application.Current.MainWindow as MainWindow).CopyToEQClick(Labels.HEALPARSE);
-    private void CopyTopHealsToEQClick(object sender, RoutedEventArgs e) => (Application.Current.MainWindow as MainWindow).CopyToEQClick(Labels.TOPHEALSPARSE);
+    private void CopyToEQClick(object sender, RoutedEventArgs e) => MainWindow.mw.CopyToEQClick(Labels.HEALPARSE);
+    private void CopyTopHealsToEQClick(object sender, RoutedEventArgs e) => MainWindow.mw.CopyToEQClick(Labels.TOPHEALSPARSE);
     private void DataGridSelectionChanged(object sender, GridSelectionChangedEventArgs e) => DataGridSelectionChanged();
 
     private void ClassSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -89,7 +89,7 @@ namespace EQLogParser
     {
       if (dataGrid.SelectedItems?.Count > 0)
       {
-        var main = Application.Current.MainWindow as MainWindow;
+        var main = MainWindow.mw;
         if (Helpers.OpenWindow(main.dockSite, null, out ContentControl log, typeof(HitLogViewer), "healingLogWindow", "Healing Log"))
         {
           (log.Content as HitLogViewer).Init(CurrentStats, dataGrid.SelectedItems.Cast<PlayerStats>().First(), CurrentGroups);

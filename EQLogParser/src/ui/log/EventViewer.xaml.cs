@@ -34,7 +34,7 @@ namespace EQLogParser
     {
       InitializeComponent();
 
-      (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete += EventsLogLoadingComplete;
+      MainWindow.mw.EventsLogLoadingComplete += EventsLogLoadingComplete;
 
       var list = new List<ComboBoxItemDetails>();
       list.Add(new ComboBoxItemDetails { IsChecked = true, Text = ZONE_EVENT });
@@ -250,7 +250,7 @@ namespace EQLogParser
     {
       if (!disposedValue)
       {
-        (Application.Current.MainWindow as MainWindow).EventsLogLoadingComplete -= EventsLogLoadingComplete;
+        MainWindow.mw.EventsLogLoadingComplete -= EventsLogLoadingComplete;
         dataGrid.Dispose();
         disposedValue = true;
       }
