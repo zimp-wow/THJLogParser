@@ -74,9 +74,9 @@ namespace EQLogParser
         switch (sub.Type)
         {
           case Labels.DOT:
-            stats = dots;
-            dots.Children.Add(sub);
-            break;
+            //stats = dots;
+            //dots.Children.Add(sub);
+            //break;
           case Labels.DD:
           case Labels.BANE:
             stats = dds;
