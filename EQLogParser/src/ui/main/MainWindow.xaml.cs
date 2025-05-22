@@ -42,8 +42,8 @@ namespace EQLogParser
     internal static readonly int ACTION_INDEX = 27;
     internal static string CurrentTheme = "MaterialDark";
 
-    private static readonly ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+    private static ILog LOG => MWLog.Value;
+    internal static Lazy<ILog> MWLog = new Lazy<ILog>(() => LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType));
     private enum LogOption { OPEN, MONITOR };
     private static readonly Regex ParseFileName = new Regex(@"^eqlog_([a-zA-Z]+)_([a-zA-Z]+).*\.txt", RegexOptions.Singleline | RegexOptions.Compiled);
     private static readonly List<string> DAMAGE_CHOICES = new List<string>() { "DPS", "Damage", "Av Hit", "% Crit" };
@@ -215,6 +215,8 @@ namespace EQLogParser
       finally
       {
         App.Splash.Hide();
+        App.eTime = DateTime.Now;
+        LOG.Info($"Application Startup Time: {(App.eTime - App.sTime)}");
       }
     }
 
