@@ -14,6 +14,10 @@ namespace EQLogParser
             Dispatcher.Invoke(() =>
             {
                 statusText.Text = message;
+                if (percent.HasValue)
+                {
+                    progressBar.Value = percent.Value;
+                }
             });
         }
     }

@@ -12,8 +12,26 @@
     <Border CornerRadius="16" BorderBrush="#FF444B5D" BorderThickness="2" Padding="0" Background="#FF23272E">
         <Grid>
             <Image Source="pack://application:,,,/src/ui/main/splash.png" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <StackPanel VerticalAlignment="Bottom" Margin="20" >
-                <TextBlock x:Name="statusText" Text="Loading..." Foreground="White" FontSize="14" Margin="0,0,0,8" HorizontalAlignment="Center"/>
+            <StackPanel VerticalAlignment="Bottom" Margin="20">
+                <!-- Custom progress bar with text inside -->
+                <Grid Height="30" Margin="0,0,0,8">
+                    <ProgressBar x:Name="progressBar" Minimum="0" Maximum="100" Value="0">
+                        <ProgressBar.Resources>
+                            <!-- Change the default progress bar color to a soft blue -->
+                            <SolidColorBrush x:Key="ProgressBarForegroundBrush" Color="#4F9FE2"/>
+                            <Style TargetType="{x:Type ProgressBar}">
+                                <Setter Property="Foreground" Value="{StaticResource ProgressBarForegroundBrush}"/>
+                                <Setter Property="Background" Value="#FF3A3A3A"/>
+                                <Setter Property="BorderBrush" Value="#FF444B5D"/>
+                            </Style>
+                        </ProgressBar.Resources>
+                    </ProgressBar>
+                    <!-- Status text overlaid on progress bar -->
+                    <TextBlock x:Name="statusText" Text="Loading..." 
+                              Foreground="White" FontSize="14" 
+                              HorizontalAlignment="Center" 
+                              VerticalAlignment="Center"/>
+                </Grid>
             </StackPanel>
         </Grid>
     </Border>
