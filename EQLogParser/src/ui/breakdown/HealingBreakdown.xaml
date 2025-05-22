@@ -21,6 +21,7 @@
       <Label x:Name="titleLabel" Style="{StaticResource EQTitleStyle}" />
     </StackPanel>
     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+      <Button Margin="0,0,8,2" Width="140" Height="24" Click="CreateImageClick" Background="{x:Null}" Focusable="False" Foreground="#FFCAC0C0" BorderBrush="#FF0275A5">Copy Parse to Clipboard</Button>
       <ComboBox Margin="0,0,0,2" x:Name="choicesList" SelectionChanged="ListSelectionChanged" />
       <ComboBox x:Name="selectedColumns" Tag="HealingBreakdownColumns" Width="135" Margin="0,0,8,2" 
                 DropDownClosed="SelectDataGridColumns" ItemTemplateSelector="{StaticResource ComboBoxSelector}"/>

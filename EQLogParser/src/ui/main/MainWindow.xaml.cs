@@ -49,7 +49,6 @@ namespace EQLogParser
     private static readonly List<string> DAMAGE_CHOICES = new List<string>() { "DPS", "Damage", "Av Hit", "% Crit" };
     private static readonly List<string> HEALING_CHOICES = new List<string>() { "HPS", "Healing", "Av Heal", "% Crit" };
     private static readonly List<string> TANKING_CHOICES = new List<string>() { "DPS", "Damaged", "Av Hit" };
-    private const string VERSION = "v0.5.0";
 
     private static long LineCount = 0;
     private static long FilePosition = 0;
@@ -126,7 +125,7 @@ namespace EQLogParser
         ((DocumentContainer)dockSite.DocContainer).AddTabDocumentAtLast = true;
 
         // update titles
-        versionText.Text = VERSION;
+        versionText.Text = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 
         MainActions.InitPetOwners(this, petMappingGrid, ownerList, petMappingWindow);
         MainActions.InitVerifiedPlayers(this, verifiedPlayersGrid, classList, verifiedPlayersWindow, petMappingWindow);

@@ -1,10 +1,13 @@
 ﻿using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.UI.Xaml.TreeGrid.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -175,6 +178,14 @@ namespace EQLogParser
         try
         {
           var realTableHeight = gridBase.ActualHeight + gridBase.HeaderRowHeight + 1;
+          if (gridBase is SfDataGrid dataGrid)
+          {
+              realTableHeight = (dataGrid.RowHeight * dataGrid.View.Records.Count) + gridBase.HeaderRowHeight + 1;
+          }
+          else if (gridBase is SfTreeGrid treeGrid)
+          {
+              realTableHeight = (treeGrid.RowHeight * treeGrid.GetTreePanel().RowCount) + gridBase.HeaderRowHeight + 1;
+          }
           var realColumnWidth = gridBase.ActualWidth;
           var titlePadding = titleLabel.Padding.Top + titleLabel.Padding.Bottom;
           var titleHeight = titleLabel.ActualHeight - titlePadding - 4;
@@ -196,9 +207,17 @@ namespace EQLogParser
             brush = new VisualBrush(gridBase);
             ctx.DrawRectangle(brush, null, new Rect(new Point(0, titleHeight + titlePadding), new Size(realColumnWidth, gridBase.ActualHeight +
               SystemParameters.HorizontalScrollBarHeight)));
-          }
 
+            ctx.DrawText(new FormattedText($"v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}",
+              CultureInfo.GetCultureInfo("en-us"),
+              FlowDirection.RightToLeft,
+              new Typeface("Verdana"),
+              14, System.Windows.Media.Brushes.WhiteSmoke),
+              new System.Windows.Point(realColumnWidth-10, titleHeight/3));
+          }
+          
           rtb.Render(dv);
+          
           Clipboard.SetImage(rtb);
         }
         catch (Exception ex)
