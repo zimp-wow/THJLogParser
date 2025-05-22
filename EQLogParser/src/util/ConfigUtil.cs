@@ -178,7 +178,7 @@ namespace EQLogParser
       }
     }
 
-    private static void Init()
+    internal static void Init()
     {
       if (!initDone)
       {
@@ -200,19 +200,20 @@ namespace EQLogParser
 
     internal static List<string> ReadEmbeddedList(byte[] resource)
     {
-      
+
       List<string> result = new List<string>();
       try
       {
-          using (var _textStreamReader = new StreamReader(new MemoryStream(resource)))
+        using (var _textStreamReader = new StreamReader(new MemoryStream(resource)))
+        {
+          var line = _textStreamReader.ReadLine();
+          while (line != null)
           {
-              var line = _textStreamReader.ReadLine();
-              while (line != null) {
-                  result.Add(line);
-                  line = _textStreamReader.ReadLine();
-              }
-
+            result.Add(line);
+            line = _textStreamReader.ReadLine();
           }
+
+        }
       }
       catch (IOException ex)
       {

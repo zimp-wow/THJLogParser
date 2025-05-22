@@ -8,5 +8,17 @@ namespace EQLogParser
         {
             InitializeComponent();
         }
+
+        public void SetStatus(string message, double? percent = null)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                statusText.Text = message;
+                if (percent.HasValue)
+                {
+                    progressBar.Value = percent.Value;
+                }
+            });
+        }
     }
 }
