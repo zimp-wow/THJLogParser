@@ -756,8 +756,15 @@ namespace EQLogParser
             {
                 PlayerManager.Instance.AddPetToPlayer( attacker, owner );
             }
+            else if (PlayerManager.Instance.IsVerifiedPet(owner))
+            {
+                var actualOwner = PlayerManager.Instance.GetPlayerFromPet(owner);
+                if (!string.IsNullOrEmpty(actualOwner))
+                {
+                    PlayerManager.Instance.AddPetToPlayer( attacker, actualOwner);
+                }
+            }
         }
-
         if (string.IsNullOrEmpty(attacker))
         {
           attacker = subType;
