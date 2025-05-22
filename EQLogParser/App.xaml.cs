@@ -15,15 +15,16 @@ namespace EQLogParser
       base.OnStartup(e);
       Splash = new SplashScreen();
       Splash.Show();
+      Application.Current.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
 
       Task.Run(async () =>
       {
         Application.Current.Dispatcher.Invoke(() => Splash.SetStatus("Loading settings...", 10));
+        await Task.Delay(150);
         var configTask = Task.Run(() => ConfigUtil.Init());
         var playerTask = Task.Run(() => PlayerManager.Instance.Init());
         var dataTask = Task.Run(() => { var _ = DataManager.Instance; });
 
-        // Wait for any one to finish to update progress
         var tasks = new[] { configTask, playerTask, dataTask };
         int completed = 0;
         while (completed < 3)
@@ -37,11 +38,13 @@ namespace EQLogParser
           else if (finished == dataTask)
             Application.Current.Dispatcher.Invoke(() => Splash.SetStatus("Data loaded...", 90));
           tasks = tasks.Where(t => !t.IsCompleted).ToArray();
+          await Task.Delay(150);
         }
 
         Application.Current.Dispatcher.Invoke(() => Splash.SetStatus("Finalizing...", 95));
-        await Task.Delay(200); // brief pause for UI
+        await Task.Delay(150);
         Application.Current.Dispatcher.Invoke(() => Splash.SetStatus("Starting...", 100));
+        await Task.Delay(150);
 
         Dispatcher.Invoke(() =>
         {
