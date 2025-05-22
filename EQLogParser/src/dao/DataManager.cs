@@ -155,8 +155,7 @@ namespace EQLogParser
       // Old Spell cache (EQEMU)
       ConfigUtil.ReadEmbeddedList(EQLogParser.Resource.oldspells).ForEach(line => OldSpellNamesDB[line] = true);
 
-            // Xan - try to open a real spell list first in local folder
-      List<string>  sd  = ConfigUtil.ReadEmbeddedList(EQLogParser.Resource.spells);
+      List<string>  sd  = RetrieveSpellsLibrary();
       sd.ForEach(line =>
       {
         try
@@ -688,6 +687,45 @@ namespace EQLogParser
       {
         RecalculateAdps();
       }
+    }
+
+    internal  List<string> RetrieveSpellsLibrary()
+    {
+        var myDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        var spellsFilePath = System.IO.Path.Combine(myDirectory, "spells_us.txt");
+        if (System.IO.File.Exists(spellsFilePath))
+        {
+            try
+            {
+                List<string> sd = ConfigUtil.ReadList(spellsFilePath);
+                sd.ForEach(line => {
+                    var spellData = ParseCustomSpellData(line);
+                });
+                return sd;
+            }
+            catch (Exception ex)
+            {
+                LOG.Error($"Error reading spell data from [{spellsFilePath}]", ex);
+            }
+        }
+        myDirectory = System.IO.Directory.GetParent(myDirectory).FullName;
+        spellsFilePath = System.IO.Path.Combine(myDirectory, "spells_us.txt");
+        if (System.IO.File.Exists(spellsFilePath))
+        {
+            try
+            {
+                List<string> sd = ConfigUtil.ReadList(spellsFilePath);
+                sd.ForEach(line => {
+                    var spellData = ParseCustomSpellData(line);
+                });
+                return sd;
+            }
+            catch (Exception ex)
+            {
+                LOG.Error($"Error reading spell data from [{spellsFilePath}]", ex);
+            }
+        }
+        return ConfigUtil.ReadEmbeddedList(EQLogParser.Resource.spells);
     }
 
     internal SpellData ParseCustomSpellData(string line)
