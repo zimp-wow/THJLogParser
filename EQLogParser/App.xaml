@@ -5,11 +5,24 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              StartupUri="src\ui\main\MainWindow.xaml">
   <Application.Resources>
-    <Style x:Key="EQIconStyle" TargetType="fa:ImageAwesome">
-      <Setter Property="Foreground" Value="{DynamicResource EQMenuIconBrush}" />
-      <Setter Property="Height" Value="12"/>
-      <Setter Property="Width" Value="12" />
-      <Setter Property="HorizontalAlignment" Value="Center" />
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="src/ui/main/MenuItemTemplates.xaml"/>
+        <ResourceDictionary Source="src/ui/main/TopLevelMenuItemTemplate.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+      <Style x:Key="EQIconStyle" TargetType="fa:ImageAwesome">
+        <Setter Property="Foreground" Value="{DynamicResource EQMenuIconBrush}" />
+        <Setter Property="Height" Value="14"/>
+        <Setter Property="Width" Value="14" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+      </Style>
+
+    <!-- Add menu styling for proper dropdown width -->
+    <Style x:Key="EQMenuStyle" TargetType="Menu">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Foreground" Value="{DynamicResource ContentForeground}"/>
+      <Setter Property="HorizontalAlignment" Value="Left"/>
+      <Setter Property="VerticalAlignment" Value="Bottom"/>
     </Style>
 
     <Style x:Key="EQTitleStyle" TargetType="Label">
@@ -121,5 +134,6 @@
         </Setter.Value>
       </Setter>
     </Style>
+    </ResourceDictionary>
   </Application.Resources>
 </Application>

@@ -3,14 +3,14 @@
 					>
 
 <Color x:Key="PrimaryBackground.Color">#FFE1E1E1</Color>
-<Color x:Key="ContentBackgroundAlt2.Color">#FF1F1F1F</Color>
+<Color x:Key="ContentBackgroundAlt2.Color">#FF232D3A</Color>
 <Color x:Key="BorderAlt2.Color">#FF8C8C8C</Color>
 <Color x:Key="ErrorBackground.Color">#FFF3584D</Color>
 <Color x:Key="SuccessForeground.Color">#FF4BAF4F</Color>
 <Color x:Key="WarningForeground.Color">#FFFF8D4D</Color>
 <Color x:Key="LinkForeground.Color">#FF0279FF</Color>
-<Color x:Key="ContentForeground.Color">#DDFFFFFF</Color>
-<Color x:Key="ContentBackground.Color">#FF121212</Color>
+<Color x:Key="ContentForeground.Color">#FFFFFFFF</Color>
+<Color x:Key="ContentBackground.Color">#FF1A2330</Color>
 <Color x:Key="PrimaryForeground.Color">#FF000000</Color>
 <Color x:Key="White.Color">#FFFFFFFF</Color>
 <Color x:Key="PrimaryColorDark1.Color">#FF0069BA</Color>
@@ -47,7 +47,7 @@
 <Color x:Key="Black.Color">#FF000000</Color>
 <Color x:Key="PrimaryDarken.Color">#FFCFCFCF</Color>
 <Color x:Key="PrimaryLightest.Color">#FFBDBDBD</Color>
-<Color x:Key="ContentBackgroundAlt4.Color">#FF313131</Color>
+<Color x:Key="ContentBackgroundAlt4.Color">#FF283242</Color>
 <Color x:Key="PrimaryColorDark2.Color">#FF004C87</Color>
 <Color x:Key="BorderAlt1.Color">#66000000</Color>
 <Color x:Key="PrimaryColorLight2.Color">#FF219EFF</Color>
@@ -67,22 +67,22 @@
 <SolidColorBrush x:Key="Gray600" Color="#FF292929" />
 <SolidColorBrush x:Key="Gray700" Color="#FF252525" />
 <SolidColorBrush x:Key="Gray800" Color="#FF1A1A1A" />
-<SolidColorBrush x:Key="Gray900" Color="#FF121212" />
+<SolidColorBrush x:Key="Gray900" Color="#FF1A2330" />
 <SolidColorBrush x:Key="Black" Color="#FF000000" />
 <SolidColorBrush x:Key="Blue" Color="#FF06DAC6" />
 <SolidColorBrush x:Key="Red" Color="#FFF3594E" />
 <SolidColorBrush x:Key="Green" Color="#FF4CAF50" />
 <SolidColorBrush x:Key="Orange" Color="#FFFF8D4D" />
-<SolidColorBrush x:Key="ContentBackgroundDark" Color="#FF121212" />
-<SolidColorBrush x:Key="ContentBackground" Color="#FF121212" />
-<SolidColorBrush x:Key="ContentBackgroundAlt" Color="#FF1A1A1A" />
-<SolidColorBrush x:Key="ContentBackgroundAlt1" Color="#FF1A1A1A" />
-<SolidColorBrush x:Key="ContentBackgroundAlt2" Color="#FF1F1F1F" />
+<SolidColorBrush x:Key="ContentBackgroundDark" Color="#FF1A2330" />
+<SolidColorBrush x:Key="ContentBackground" Color="#FF1A2330" />
+<SolidColorBrush x:Key="ContentBackgroundAlt" Color="#FF1E2835" />
+<SolidColorBrush x:Key="ContentBackgroundAlt1" Color="#FF1E2835" />
+<SolidColorBrush x:Key="ContentBackgroundAlt2" Color="#FF232D3A" />
 <SolidColorBrush x:Key="ContentBackgroundAlt3" Color="#FF888888" />
-<SolidColorBrush x:Key="ContentBackgroundAlt4" Color="#FF313131" />
-<SolidColorBrush x:Key="ContentBackgroundAlt5" Color="#FF404040" />
-<SolidColorBrush x:Key="ContentBackgroundHover" Color="#FF303030" />
-<SolidColorBrush x:Key="ContentBackgroundSelection" Color="#FF3A3A3A" />
+<SolidColorBrush x:Key="ContentBackgroundAlt4" Color="#FF283242" />
+<SolidColorBrush x:Key="ContentBackgroundAlt5" Color="#FF323E4F" />
+<SolidColorBrush x:Key="ContentBackgroundHover" Color="#FF263545" />
+<SolidColorBrush x:Key="ContentBackgroundSelection" Color="#FF2A3A50" />
 <SolidColorBrush x:Key="ContentBackgroundDisabled" Color="#FF252525" />
 <SolidColorBrush x:Key="ContentForeground" Color="#DDFFFFFF" />
 <SolidColorBrush x:Key="ContentForegroundAlt" Color="#A5FFFFFF" />
@@ -90,7 +90,7 @@
 <SolidColorBrush x:Key="DisabledForeground" Color="#FF5E5E5E" />
 <SolidColorBrush x:Key="HoverForeground" Color="#DDFFFFFF" />
 <SolidColorBrush x:Key="SelectionForeground" Color="#DDFFFFFF" />
-<SolidColorBrush x:Key="PopupBackground" Color="#FF252525" />
+<SolidColorBrush x:Key="PopupBackground" Color="#FF253040" />
 <SolidColorBrush x:Key="PrimaryBackground" Color="#FFE1E1E1" />
 <SolidColorBrush x:Key="PrimaryBackgroundOpacity" Color="#3FE1E1E1" />
 <SolidColorBrush x:Key="PrimaryBackgroundOpacity2" Color="#4CE1E1E1" />
@@ -124,7 +124,7 @@
 <SolidColorBrush x:Key="SuccessForeground" Color="#FF4BAF4F" />
 <SolidColorBrush x:Key="WarningForeground" Color="#FFFF8D4D" />
 <SolidColorBrush x:Key="TooltipBackground" Color="#FFC0C0C0" />
-<SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FF121212" />
+<SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FF1A2330" />
 <SolidColorBrush x:Key="Series1" Color="#FF632AD8" />
 <SolidColorBrush x:Key="Series2" Color="#FF00ABB8" />
 <SolidColorBrush x:Key="Series3" Color="#FF2C69DC" />
