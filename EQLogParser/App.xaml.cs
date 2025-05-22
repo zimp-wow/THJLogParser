@@ -13,8 +13,11 @@ namespace EQLogParser
   public partial class App : Application
   {
     internal static SplashScreen Splash;
+        internal static DateTime sTime;
+        internal static DateTime eTime;
     protected override void OnStartup(StartupEventArgs e)
     {
+      sTime = DateTime.Now;
       base.OnStartup(e);
       Splash = new SplashScreen();
       Splash.Show();
@@ -32,14 +35,14 @@ namespace EQLogParser
       Splash.SetStatus("Settings loaded...", 30);
       DoEvents();
 
-      PlayerManager.Instance.Init();
+      var _ = PlayerManager.Instance;
       Splash.SetStatus("Players loaded...", 60);
       DoEvents();
 
       Splash.SetStatus("Loading data...", 75);
       DoEvents();
 
-      var _ = DataManager.Instance;
+      var __ = DataManager.Instance;
       Splash.SetStatus("Data loaded...", 90);
       DoEvents();
 
@@ -50,10 +53,7 @@ namespace EQLogParser
       DoEvents();
 
       timer.Stop();
-
-      var mainWindow = new EQLogParser.MainWindow();
-      mainWindow.Show();
-      Splash.Close();
+      EQLogParser.MainWindow.MWLog.Value.Info($"Splash Loader processing time: {(DateTime.Now - sTime)}");
     }
 
     private void CloseOverlay_MouseClick(object sender, RoutedEventArgs e) => OverlayUtil.ResetOverlay();

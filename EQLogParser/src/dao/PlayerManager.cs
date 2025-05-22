@@ -20,7 +20,8 @@ namespace EQLogParser
     internal event EventHandler<string> EventsRemoveVerifiedPlayer;
     internal event EventHandler<string> EventsUpdatePlayerClass;
 
-    internal static PlayerManager Instance = new PlayerManager();
+    internal static Lazy<PlayerManager> _instance = new Lazy<PlayerManager>(() => new PlayerManager());
+    internal static PlayerManager Instance => _instance.Value;
 
     internal static readonly BitmapImage BER_ICON = new BitmapImage(new Uri(@"pack://application:,,,/icons/Ber.png"));
     internal static readonly BitmapImage BRD_ICON = new BitmapImage(new Uri(@"pack://application:,,,/icons/Brd.png"));
@@ -409,7 +410,7 @@ namespace EQLogParser
       return result;
     }
 
-    internal void Init()
+    internal PlayerManager Init()
     {
       lock (LockObject)
       {
@@ -472,6 +473,7 @@ namespace EQLogParser
 
         PetMappingUpdated = false;
       }
+      return this;
     }
 
     internal void Save()

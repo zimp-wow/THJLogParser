@@ -69,7 +69,8 @@ namespace EQLogParser
   {
     private static readonly log4net.ILog LOG = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-    internal static DataManager Instance = new DataManager();
+    internal static Lazy<DataManager> _instance = new Lazy<DataManager>(() => new DataManager());
+    internal static DataManager Instance => _instance.Value;
     internal event EventHandler<string> EventsRemovedFight;
     internal event EventHandler<Fight> EventsNewFight;
     internal event EventHandler<Fight> EventsNewNonTankingFight;
