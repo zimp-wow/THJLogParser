@@ -172,7 +172,7 @@ jobs:
           if (Test-Path $exePath) {
             $hash = Get-FileHash -Path $exePath -Algorithm MD5
             $hash.Hash | Out-File -FilePath $md5Path -Encoding ASCII
-            Write-Host "MD5 hash written to $md5Path: $($hash.Hash)"
+            Write-Host "MD5 hash written to ${md5Path}: $($hash.Hash)"
           } else {
             Write-Host "ERROR: $exePath not found, cannot generate MD5."
             exit 1
