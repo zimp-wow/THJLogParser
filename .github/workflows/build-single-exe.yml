@@ -192,6 +192,23 @@ jobs:
         run: |
           Copy-Item "EQLogParser/README.txt" "publish/README.txt" -Force
 
+      - name: Copy CHANGELOG.md to publish folder
+        run: |
+          Copy-Item "EQLogParser/CHANGELOG.md" "publish/CHANGELOG.md" -Force
+
+      - name: Generate MD5 hash for CHANGELOG.md
+        run: |
+          $changelogPath = "publish/CHANGELOG.md"
+          $md5Path = "publish/CHANGELOG.md.md5"
+          if (Test-Path $changelogPath) {
+            $hash = Get-FileHash -Path $changelogPath -Algorithm MD5
+            $hash.Hash | Out-File -FilePath $md5Path -Encoding ASCII
+            Write-Host "MD5 hash written to ${md5Path}: $($hash.Hash)"
+          } else {
+            Write-Host "ERROR: $changelogPath not found, cannot generate MD5."
+            exit 1
+          }
+
       - name: Verify final artifact contents
         run: |
           Write-Host "Final contents of publish directory:"
@@ -236,6 +253,8 @@ jobs:
             publish/THJLogParser.exe
             publish/THJLogParser.exe.md5
             publish/README.txt
+            publish/CHANGELOG.md
+            publish/CHANGELOG.md.md5
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
