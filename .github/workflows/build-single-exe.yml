@@ -188,6 +188,10 @@ jobs:
             New-Item -Path "publish/data" -ItemType Directory -Force
           }
 
+      - name: Copy README.txt to publish folder
+        run: |
+          Copy-Item "EQLogParser/README.txt" "publish/README.txt" -Force
+
       - name: Verify final artifact contents
         run: |
           Write-Host "Final contents of publish directory:"
@@ -231,6 +235,7 @@ jobs:
             THJLogParser.zip
             publish/THJLogParser.exe
             publish/THJLogParser.exe.md5
+            publish/README.txt
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

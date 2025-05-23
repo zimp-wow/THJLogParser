@@ -16,7 +16,7 @@
         TextOptions.TextFormattingMode="Display"
         WindowStartupLocation="Manual"
         StateChanged="WindowStateChanged"
-        Icon="src/ui/main/Logparsericon.ico">
+        Icon="pack://application:,,,/src/ui/main/Logparsericon.ico">
   <syncfusion:ChromelessWindow.Resources>
     <Style x:Key="MenuHeaderStyle" TargetType="MenuItem">
       <Setter Property="Template" Value="{StaticResource TopLevelMenuItemTemplate}" />
