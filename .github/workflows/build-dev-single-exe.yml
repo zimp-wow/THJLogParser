@@ -1,0 +1,52 @@
+name: Build Dev Executable
+
+on:
+  workflow_dispatch:
+    # Manual trigger only
+
+jobs:
+  build-dev:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Remove Unneeded Projects
+        run: |
+          dotnet sln EQLogParser.sln remove WixCustom/WixCustom.csproj || echo "Already removed"
+          dotnet sln EQLogParser.sln remove EQLogParserInstall/EQLogParserInstall.wixproj || echo "Already removed"
+
+      - name: Restore and Build Dev Executable
+        run: |
+          dotnet restore EQLogParser/EQLogParser.csproj /p:RuntimeIdentifier=win-x64
+
+          dotnet publish EQLogParser/EQLogParser.csproj -c Release -r win-x64 --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:IncludeNativeLibrariesForSelfExtract=true `
+            /p:EnableCompressionInSingleFile=true `
+            /p:IncludeAllContentForSelfExtract=true `
+            -o dev-publish
+
+      - name: Rename Executable for Dev
+        run: |
+          cd dev-publish
+          if (Test-Path "EQLogParser.exe") {
+            Rename-Item "EQLogParser.exe" "THJLogParser-dev.exe"
+          } else {
+            echo "ERROR: EQLogParser.exe not found!"
+            exit 1
+          }
+
+      - name: Upload Dev Executable as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: THJLogParser-dev
+          path: dev-publish/THJLogParser-dev.exe
