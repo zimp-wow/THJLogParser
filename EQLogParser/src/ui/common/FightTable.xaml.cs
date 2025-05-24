@@ -207,6 +207,13 @@ namespace EQLogParser
 
         processList.ForEach(fight =>
         {
+          if (fight.IsInactivity)
+          {
+            CurrentGroup++;
+            AddManualDivider(fight, Fights, lastWithTankingTime);
+            return;
+          }
+
           if (!double.IsNaN(lastWithTankingTime) && fight.BeginTime - lastWithTankingTime >= GroupTimeout)
           {
             CurrentGroup++;
@@ -239,6 +246,13 @@ namespace EQLogParser
 
         processNonTankingList.ForEach(fight =>
         {
+          if (fight.IsInactivity)
+          {
+            CurrentNonTankingGroup++;
+            AddManualDivider(fight, NonTankingFights, lastNonTankingTime);
+            return;
+          }
+
           if (!double.IsNaN(lastNonTankingTime) && fight.DamageHits > 0 && fight.BeginTime - lastNonTankingTime >= GroupTimeout)
           {
             CurrentNonTankingGroup++;
@@ -277,6 +291,15 @@ namespace EQLogParser
 
       divider.SortId = CurrentSortId++;
       list.Add(divider);
+    }
+
+    private void AddManualDivider(Fight fight, ObservableCollection<Fight> list, double lastTime)
+    {
+      fight.LastTime = fight.BeginTime;
+      fight.LastDamageTime = fight.BeginTime;
+      fight.BeginTime = double.IsNaN(lastTime) ? fight.BeginTime : lastTime;
+      fight.SortId = CurrentSortId++;
+      list.Add(fight);
     }
 
     private void NewRowsAdded(ObservableCollection<Fight> list)

@@ -72,6 +72,14 @@ namespace EQLogParser
     {
       try
       {
+        if (lineData.Action.Contains("log_break"))
+        {
+          int start = lineData.Action.IndexOf("log_break") + 9;
+          string name = lineData.Action.Substring(start).Replace("'", "").Trim();
+          DataManager.Instance.AddDivider(name, lineData.BeginTime);
+          return;
+        }
+
         string[] split = lineData.Action.Split(' ');
 
         // Xan - fix for poorly formatted slay messages

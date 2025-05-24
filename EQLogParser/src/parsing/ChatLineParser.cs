@@ -18,6 +18,12 @@
             PlayerManager.Instance.AddVerifiedPlayer(chatType.Sender, lineData.BeginTime);
           }
         }
+
+        if (chatType.SenderIsYou == true && chatType.Text.Contains("log_break"))
+        {
+          //Lie and pretend its not a chat line so the DamageLineParser will pick it up
+          return null;
+        }
       }
 
       return chatType;

@@ -1091,6 +1091,36 @@ namespace EQLogParser
       }
     }
 
+    internal void AddDivider(string name, double beginTime)
+    {
+      foreach (string fight_name in ActiveFights.Keys)
+      {
+        RemoveActiveFight(fight_name);
+      }
+
+      Fight divider = new Fight
+      {
+        LastTime = beginTime,
+        BeginTime = beginTime,
+        IsInactivity = true,
+        BeginTimeString = Fight.BREAKTIME,
+        Name = name,
+        TooltipText = "User specified break"
+      };
+      EventsNewFight?.Invoke(this, divider);
+
+      Fight ntDivider = new Fight
+      {
+        LastTime = beginTime,
+        BeginTime = beginTime,
+        IsInactivity = true,
+        BeginTimeString = Fight.BREAKTIME,
+        Name = name,
+        TooltipText = "User specified break"
+      };
+      EventsNewNonTankingFight?.Invoke(this, ntDivider);
+    }
+
     private static List<ActionBlock> SearchActions(List<ActionBlock> allActions, double beginTime, double endTime)
     {
       ActionBlock startBlock = new ActionBlock { BeginTime = beginTime };
