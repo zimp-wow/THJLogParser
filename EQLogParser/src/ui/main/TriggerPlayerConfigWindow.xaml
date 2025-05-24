@@ -1,0 +1,118 @@
+﻿<syncfusion:ChromelessWindow x:Class="EQLogParser.TriggerPlayerConfigWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+  mc:Ignorable="d"
+  ResizeMode="NoResize"
+  ShowIcon="False"
+  ShowInTaskbar="False"
+  WindowStyle="ToolWindow"
+  TitleBarHeight="{DynamicResource EQTableHeaderRowHeight}"
+  TitleFontSize="{DynamicResource EQContentSize}"
+  TitleBarForeground="{DynamicResource PrimaryDarken}"
+  TitleTextAlignment="Left"
+  Topmost="True"
+  UseLayoutRounding="True"
+  WindowStartupLocation="CenterOwner"
+  SizeToContent="WidthAndHeight"
+  MinHeight="135"
+  Title="Add New Character"
+  Height="180">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="1*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="2*" />
+      <RowDefinition Height="1*" />
+    </Grid.RowDefinitions>
+    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3">
+      <StackPanel Orientation="Vertical" Margin="20,0,20,0">
+        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="205" />
+              <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Name:" HorizontalAlignment="Left" FontSize="{DynamicResource EQTitleSize}" />
+            <TextBox Grid.Column="1" Name="characterName" FontStyle="Italic" TextChanged="TextChanged" PreviewKeyDown="NamePreviewKeyDown" GotFocus="NameGotFocus" LostFocus="NameLostFocus" FontSize="{DynamicResource EQContentSize}" Width="300"/>
+          </Grid>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="205" />
+              <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Select Log" FontSize="{DynamicResource EQContentSize}" HorizontalAlignment="Left" Padding="10,6,12,6" Click="ChooseFileClicked"/>
+            <TextBox Grid.Column="1" Name="txtFilePath" FontStyle="Italic" Text="Select Log File" TextChanged="TextChanged" FontSize="{DynamicResource EQContentSize}" IsReadOnly="True" Width="300"/>
+          </Grid>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="205" />
+              <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Voice:" HorizontalAlignment="Left" FontSize="{DynamicResource EQTitleSize}" />
+            <ComboBox Grid.Column="1" x:Name="voices" SelectedIndex="0" Width="300" SelectionChanged="OptionsChanged"/>
+          </Grid>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="205" />
+              <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Voice Rate:" HorizontalAlignment="Left" FontSize="{DynamicResource EQTitleSize}" />
+            <ComboBox Grid.Column="1" x:Name="rateOption" SelectedIndex="0" Width="300" SelectionChanged="OptionsChanged">
+              <ComboBoxItem>Default Voice Rate</ComboBoxItem>
+              <ComboBoxItem>Increased Rate 1</ComboBoxItem>
+              <ComboBoxItem>Increased Rate 2</ComboBoxItem>
+              <ComboBoxItem>Increased Rate 3</ComboBoxItem>
+              <ComboBoxItem>Increased Rate 4</ComboBoxItem>
+              <ComboBoxItem>Increased Rate 5</ComboBoxItem>
+              <ComboBoxItem>Increased Rate 6</ComboBoxItem>
+            </ComboBox>
+          </Grid>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="205" />
+              <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Overlay Active Color:" HorizontalAlignment="Left" FontSize="{DynamicResource EQTitleSize}" />
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+              <TextBox x:Name="activeSelectText" IsReadOnly="True" PreviewMouseLeftButtonDown="SelectActiveColorClick" Text="Click to Select Color" FontStyle="Italic" Cursor="Hand" FontSize="{DynamicResource EQContentSize}" Width="305" BorderThickness="0" Padding="4,4,0,4" Margin="0"></TextBox>
+              <syncfusion:ColorPicker x:Name="activeColorPicker" SelectedBrushChanged="SelectedColorChanged" Visibility="Collapsed" Width="305" BorderThickness="0" Padding="4,0,0,4" Margin="0" IsGradientPropertyEnabled="False" EnableSolidToGradientSwitch="False" />
+              <Button Margin="5,3,0,1" Padding="5,0,5,0" Click="ResetActiveColorClick">Reset</Button>
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="205" />
+              <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Overlay Font Color:" HorizontalAlignment="Left" FontSize="{DynamicResource EQTitleSize}" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+              <TextBox x:Name="fontSelectText" IsReadOnly="True" PreviewMouseLeftButtonDown="SelectFontColorClick" Text="Click to Select Color" FontStyle="Italic" Cursor="Hand" FontSize="{DynamicResource EQContentSize}" Width="305" BorderThickness="0" Padding="4,4,0,4" Margin="0"></TextBox>
+              <syncfusion:ColorPicker x:Name="fontColorPicker" SelectedBrushChanged="SelectedColorChanged" Visibility="Collapsed" Width="305" BorderThickness="0" Padding="4,0,0,4" Margin="0" IsGradientPropertyEnabled="False" EnableSolidToGradientSwitch="False" />
+              <Button Margin="5,3,0,1" Padding="5,0,5,0" Click="ResetFontColorClick">Reset</Button>
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+      </StackPanel>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Right" Margin="0,15,15,15">
+      <Button x:Name="saveButton" Foreground="{DynamicResource PrimaryDarken}" Height="{DynamicResource EQButtonHeight}" FontSize="{DynamicResource EQContentSize}" Click="SaveClicked" Margin="2,0,4,0" Padding="10,0,10,0" Content="Save" IsEnabled="False" />
+      <Button x:Name="cancelButton" Foreground="{DynamicResource PrimaryDarken}" Height="{DynamicResource EQButtonHeight}" FontSize="{DynamicResource EQContentSize}" Click="CancelClicked" Margin="2,0,4,0" Padding="10,0,10,0" Content="Cancel" />
+    </StackPanel>
+  </Grid>
+</syncfusion:ChromelessWindow>

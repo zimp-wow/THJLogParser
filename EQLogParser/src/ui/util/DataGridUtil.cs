@@ -1,4 +1,5 @@
-﻿using Syncfusion.Data;
+﻿using Microsoft.VisualBasic.Logging;
+using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using Syncfusion.UI.Xaml.TreeGrid.Helpers;
@@ -89,7 +90,115 @@ namespace EQLogParser
       }
     }
 
-    internal static void CopyCsvFromTable(SfGridBase gridBase, string title)
+        internal static void RefreshTableColumns(SfGridBase gridBase)
+        {
+            try
+            {
+                if (gridBase is SfDataGrid dataGrid)
+                {
+                    foreach (var column in dataGrid.Columns)
+                    {
+                        // ignore hidden columns or ones using a sizer
+                        if (column.ColumnSizer != GridLengthUnitType.None || column.IsHidden)
+                        {
+                            continue;
+                        }
+
+                        column.Width = GetColumnWidth(column.MappingName, column.HeaderText);
+                    }
+                }
+                else if (gridBase is SfTreeGrid treeGrid)
+                {
+                    foreach (var column in treeGrid.Columns)
+                    {
+                        // ignore hidden columns or ones using a sizer
+                        if (column.ColumnSizer != TreeColumnSizer.None || column.IsHidden)
+                        {
+                            continue;
+                        }
+
+                        column.Width = GetColumnWidth(column.MappingName, column.HeaderText);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LOG.Debug(ex);
+            }
+        }
+
+        private static double GetColumnWidth(string mappingName, string text)
+        {
+            if (mappingName is "Acted" or "Actor" or "Record.Npc" or "Npc" or "Target")
+            {
+                return MainActions.CurrentNpcWidth;
+            }
+
+            if (mappingName is "Name")
+            {
+                return MainActions.CurrentNameWidth;
+            }
+
+            if (mappingName is "Spell" or "Key" or "Action")
+            {
+                return MainActions.CurrentSpellWidth;
+            }
+
+            if (mappingName is "SortId" or "BeginTime" or "LogTime" or "RollTime")
+            {
+                return MainActions.CurrentDateTimeWidth;
+            }
+
+            if (mappingName is "Record.Item" or "Details")
+            {
+                return MainActions.CurrentItemWidth;
+            }
+
+            if (mappingName is "TimeSince" or "Hits" or "Lucky" or "Critical" or "Twincast" or
+                "Rampage" or "Riposte" or "Percent" or "PercentOfRaid" or "TotalSeconds" or "CritRate" or
+                "LuckRate" or "ExtraRate" or "BaneHits" or "MeleeAccRate" or "MeleeHitRate" or
+                "TwincastRate" or "TwincastHits")
+            {
+                return MainActions.CurrentShortWidth;
+            }
+
+            if (mappingName is "Avg" or "AvgCrit" or "AvgLucky" or "Special" or "Dps" or "Sdps" or
+                "Eval" or "Priority" or "Count" or "From" or "To" or "Rolled" or "MeleeAttempts"
+                or "Min" or "Max" or "BestSec" or "FlurryRate" or "ResistRate")
+            {
+                return MainActions.CurrentMediumWidth;
+            }
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                return CalculateMinGridHeaderWidth(text);
+            }
+
+            return double.NaN;
+        }
+        internal static double CalculateMinGridHeaderWidth(string value)
+        {
+            const string defaultValue = "123456789";
+            if (string.IsNullOrEmpty(value) || value.Length < 9)
+            {
+                value = defaultValue;
+            }
+
+            // Create the FormattedText object
+            var formattedText = new FormattedText(
+              value,
+              System.Globalization.CultureInfo.CurrentCulture,
+              FlowDirection.LeftToRight,
+              new Typeface(MainActions.CurrentFontFamily),
+              MainActions.CurrentFontSize,
+              Brushes.Black, // The brush doesn't affect size calculation
+              VisualTreeHelper.GetDpi(new Window()).PixelsPerDip // This ensures the text size is scaled correctly for the display DPI
+            );
+
+            // Calculate the height required for the text
+            return Math.Round(formattedText.Width + 34);
+        }
+        internal static void CopyCsvFromTable(SfGridBase gridBase, string title)
     {
       try
       {

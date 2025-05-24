@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace EQLogParser
 {
-    public class ConcurrentQueue<T> : IDisposable
+    public class ConcurrentQueue<T> : BlockingCollection<T>, IDisposable, IProducerConsumerCollection<T>
     {
         internal System.Collections.Concurrent.BlockingCollection<StrongBox<T>> InternalCollection;
         public ConcurrentQueue()
@@ -50,6 +51,11 @@ namespace EQLogParser
         {
             while (!this.IsEmpty())
                 System.Threading.Thread.Sleep(1);
+        }
+        public void Clear()
+        {
+            InternalCollection.Dispose();
+            InternalCollection = new BlockingCollection<StrongBox<T>>();
         }
 
         private bool disposedValue;

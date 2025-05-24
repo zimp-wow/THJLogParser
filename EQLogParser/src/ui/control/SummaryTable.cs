@@ -179,17 +179,17 @@ namespace EQLogParser
             UpdateDataGridMenuItems();
         }
 
-        internal void FireSelectionChangedEvent(List<PlayerStats> selected)
-        {
-            Dispatcher.InvokeAsync(() =>
-            {
-                var selectionChanged = new PlayerStatsSelectionChangedEventArgs();
-                selectionChanged.Selected.AddRange(selected);
-                selectionChanged.CurrentStats = CurrentStats;
-                EventsSelectionChange(this, selectionChanged);
-            });
-        }
-
+        //internal void FireSelectionChangedEvent(List<PlayerStats> selected)
+        //{
+        //    Dispatcher.InvokeAsync(() =>
+        //    {
+        //        var selectionChanged = new PlayerStatsSelectionChangedEventArgs();
+        //        selectionChanged.Selected.AddRange(selected);
+        //        selectionChanged.CurrentStats = CurrentStats;
+        //        EventsSelectionChange(this, selectionChanged);
+        //    });
+        //}
+        internal virtual void FireSelectionChangedEvent(List<PlayerStats> stats) => new object(); // need to override this method
         internal void ShowSpellCasts(List<PlayerStats> selected)
         {
             if (selected?.Count > 0)

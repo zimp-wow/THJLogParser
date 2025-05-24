@@ -149,9 +149,68 @@ namespace EQLogParser
           CollapseRight(index);
         }
       }
-    }
+        }
 
-    private static bool IsLeftOf(TimeSegment one, double value) => value > one.BeginTime && value > one.EndTime;
+        internal static bool TimeCheck(string line, double start, double end = -1)
+        {
+            var pass = false;
+            if (!string.IsNullOrEmpty(line) && line.Length > 24)
+            {
+                var logTime = DateUtil.StandardDateToDouble(line);
+                if (!double.IsNaN(logTime))
+                {
+                    if (end > -1)
+                    {
+                        pass = logTime >= start && logTime <= end;
+                    }
+                    else
+                    {
+                        pass = start > 0 && logTime >= start;
+                    }
+                }
+            }
+
+            return pass;
+        }
+
+        internal static bool TimeCheck(string line, double start, TimeRange range, out bool exceeds)
+        {
+            var pass = false;
+            exceeds = false;
+            if (!string.IsNullOrEmpty(line) && line.Length > 24)
+            {
+                var logTime = DateUtil.StandardDateToDouble(line);
+                if (!double.IsNaN(logTime))
+                {
+                    if (range == null)
+                    {
+                        pass = start > -1 && logTime >= start;
+                    }
+                    else
+                    {
+                        if (logTime > range.TimeSegments.Last().EndTime)
+                        {
+                            exceeds = true;
+                        }
+                        else
+                        {
+                            foreach (var segment in range.TimeSegments)
+                            {
+                                if (logTime >= segment.BeginTime && logTime <= segment.EndTime)
+                                {
+                                    pass = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return pass;
+        }
+
+        private static bool IsLeftOf(TimeSegment one, double value) => value > one.BeginTime && value > one.EndTime;
     private static bool IsRightOf(TimeSegment one, double value) => value < one.BeginTime && value < one.EndTime;
     private static bool IsSurrounding(TimeSegment one, TimeSegment two) => two.BeginTime <= one.BeginTime && two.EndTime >= one.EndTime;
     private static bool IsWithin(TimeSegment one, double value) => value >= one.BeginTime && value <= one.EndTime;

@@ -194,7 +194,7 @@ namespace EQLogParser
               Entries = archive.Entries.Where(entry =>
               {
                 bool found = false;
-                if (entry.Name != ChatManager.INDEX)
+                if (entry.Name != ChatManager.Index)
                 {
                   string dayString = monthString + "-" + entry.Name;
                   if (DateTime.TryParseExact(dayString, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime day) && CurrentChatFilter.DuringDay(day))
