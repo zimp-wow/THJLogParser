@@ -34,6 +34,7 @@
                            AllowSelectionOnPointerPressed="True"
                            AllowSorting="True"
                            AutoExpandMode="RootNodesExpanded"
+                           LiveNodeUpdateMode="AllowDataShaping"
                            AutoGenerateColumns="False"
                            ColumnSizer="Auto"
                            FrozenColumnCount="1"
