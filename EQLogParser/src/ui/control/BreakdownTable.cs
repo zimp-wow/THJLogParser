@@ -1,5 +1,6 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,6 +36,7 @@ namespace EQLogParser
       TheDataGrid.SortColumnsChanging += (object s, GridSortColumnsChangingEventArgs e) => DataGridUtil.SortColumnsChanging(s, e, desc);
       TheDataGrid.SortColumnsChanged += (object s, GridSortColumnsChangedEventArgs e) => DataGridUtil.SortColumnsChanged(s, e, desc);
       DataGridUtil.LoadColumns(TheColumnsCombo, TheDataGrid);
+      TheDataGrid.ItemsSourceChanged += new System.EventHandler<Syncfusion.UI.Xaml.TreeGrid.TreeGridItemsSourceChangedEventArgs>(this.RootItemsSourceChanged);
 
       // workaround to avoid drag/drop failing when grid has no data
       TheDataGrid.ItemsSource = new List<PlayerStats>();
@@ -44,9 +46,18 @@ namespace EQLogParser
     internal void CreateImageClick(object sender, RoutedEventArgs e) => DataGridUtil.CreateImage(TheDataGrid, TheTitle);
     internal void TreeGridPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => DataGridUtil.EnableMouseSelection(sender, e);
     internal void SelectDataGridColumns(object sender, EventArgs e) => DataGridUtil.SetHiddenColumns(TheColumnsCombo, TheDataGrid);
+    private void RootItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
+    {
+        if (TheDataGrid.View != null)
+        {
+            TheDataGrid.SortColumnDescriptions.Clear();
+            TheDataGrid.SortColumnDescriptions.Add(new SortColumnDescription { ColumnName = "Total", SortDirection = ListSortDirection.Descending });
+            TheDataGrid.View.RefreshFilter();
+        }
+    }
 
-    #region IDisposable Support
-    private bool disposedValue = false; // To detect redundant calls
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
 
     protected virtual void Dispose(bool disposing)
     {
