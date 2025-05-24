@@ -15,7 +15,7 @@ namespace EQLogParser
   /// <summary>
   /// Interaction logic for ChatViewer.xaml
   /// </summary>
-  public partial class ChatViewer : UserControl, IDisposable
+  public partial class ChatViewer : UserControl
   {
     private static readonly List<double> FontSizeList = new List<double>() { 10, 12, 14, 16, 18, 20, 22, 24 };
 
@@ -70,15 +70,15 @@ namespace EQLogParser
       LoadPlayers();
 
       Ready = true;
-      ChatManager.EventsUpdatePlayer += ChatManagerEventsUpdatePlayer;
-      ChatManager.EventsNewChannels += ChatManagerEventsNewChannels;
+      ChatManager.Instance.EventsUpdatePlayer += ChatManagerEventsUpdatePlayer;
+      ChatManager.Instance.EventsNewChannels += ChatManagerEventsNewChannels;
       MainWindow.mw.EventsThemeChanged += EventsThemeChanged;
       Task.Delay(500).ContinueWith(task => Dispatcher.InvokeAsync(() => ChangeSearch()));
     }
 
     private void EventsThemeChanged(object sender, string e) => UpdateCurrentTextColor();
     private void RefreshClick(object sender, RoutedEventArgs e) => ChangeSearch(true);
-    private void ChatManagerEventsUpdatePlayer(object sender, string player) => LoadPlayers(player);
+    private void ChatManagerEventsUpdatePlayer(string player) => LoadPlayers(player);
     private void ToFilterLostFocus(object sender, RoutedEventArgs e) => FilterLostFocus(toFilter, EQLogParser.Resource.CHAT_TO_FILTER);
     private void FromFilterLostFocus(object sender, RoutedEventArgs e) => FilterLostFocus(fromFilter, EQLogParser.Resource.CHAT_FROM_FILTER);
     private void TextFilterLostFocus(object sender, RoutedEventArgs e) => FilterLostFocus(textFilter, EQLogParser.Resource.CHAT_TEXT_FILTER);
@@ -108,7 +108,7 @@ namespace EQLogParser
       }
     }
 
-    private void ChatManagerEventsNewChannels(object sender, List<string> e)
+    private void ChatManagerEventsNewChannels(List<string> e)
     {
       _ = Dispatcher.InvokeAsync(() =>
         {
@@ -148,7 +148,7 @@ namespace EQLogParser
       };
 
       int count = 0;
-      ChatManager.GetChannels(playerAndServer).ForEach(chan =>
+      ChatManager.Instance.GetChannels(playerAndServer).ForEach(chan =>
       {
         count += chan.IsChecked ? 1 : 0;
         items.Add(chan);
@@ -260,14 +260,14 @@ namespace EQLogParser
 
     private void ChatTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-      if (chatBox.Text != null && chatBox.Lines.Count <= PAGE_SIZE)
-      {
-        Task.Delay(100).ContinueWith(task => Dispatcher.InvokeAsync(() =>
-        {
-          chatBox.GoToLine(chatBox.Lines.Count);
-          LastFocused?.Focus();
-        }));
-      }
+      //if (chatBox.Text != null && chatBox.Lines.Count <= PAGE_SIZE)
+      //{
+      //  Task.Delay(100).ContinueWith(task => Dispatcher.InvokeAsync(() =>
+      //  {
+      //    chatBox.GoToLine(chatBox.Lines.Count);
+      //    LastFocused?.Focus();
+      //  }));
+      //}
     }
 
     private void ChatPreviewKeyDown(object sender, KeyEventArgs e)
@@ -475,33 +475,6 @@ namespace EQLogParser
           ChangeSearch();
         }
       }
-    }
-
-    #region IDisposable Support
-    private bool disposedValue = false; // To detect redundant calls
-
-    protected virtual void Dispose(bool disposing)
-    {
-      if (!disposedValue)
-      {
-        MainWindow.mw.EventsThemeChanged -= EventsThemeChanged;
-        ChatManager.EventsUpdatePlayer -= ChatManagerEventsUpdatePlayer;
-        ChatManager.EventsNewChannels -= ChatManagerEventsNewChannels;
-
-        chatBox?.Dispose();
-        FilterTimer?.Stop();
-        disposedValue = true;
-      }
-    }
-
-    // This code added to correctly implement the disposable pattern.
-    public void Dispose()
-    {
-      // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-      Dispose(true);
-      // TODO: uncomment the following line if the finalizer is overridden above.
-      GC.SuppressFinalize(this);
-    }
-    #endregion
+    }    
   }
 }

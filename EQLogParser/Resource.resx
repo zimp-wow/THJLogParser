@@ -120,6 +120,18 @@
   <data name="ANY_CLASS" xml:space="preserve">
     <value>All Classes</value>
   </data>
+  <data name="APP_SETTINGS" xml:space="preserve">
+    <value>Application Settings</value>
+  </data>
+  <data name="ASSIGN_OVERLAY" xml:space="preserve">
+    <value>Update Overlay</value>
+  </data>
+  <data name="ASSIGN_PRIORITY" xml:space="preserve">
+    <value>Set Priority</value>
+  </data>
+  <data name="AUDIO_ERROR" xml:space="preserve">
+    <value>Audio Playback Failed</value>
+  </data>
   <data name="BER" xml:space="preserve">
     <value>Berserker</value>
   </data>
@@ -141,6 +153,9 @@
   <data name="CHAT_TO_FILTER" xml:space="preserve">
     <value>To</value>
   </data>
+  <data name="CHECK_VERSION" xml:space="preserve">
+    <value>Checking For Updates</value>
+  </data>
   <data name="CLEAR_CHAT" xml:space="preserve">
     <value>Clear Chat Archive</value>
   </data>
@@ -149,6 +164,12 @@
   </data>
   <data name="COLUMNS_SELECTED" xml:space="preserve">
     <value>Columns</value>
+  </data>
+  <data name="COPY_LARGE_IMAGE" xml:space="preserve">
+    <value>Copy Large Image</value>
+  </data>
+  <data name="CREATE_BACKUP" xml:space="preserve">
+    <value>Create Backup File</value>
   </data>
   <data name="CUSTOM_PARSE_TITLE" xml:space="preserve">
     <value>Custom Parse Title</value>
@@ -165,14 +186,26 @@
   <data name="EVENT_TYPES_SELECTED" xml:space="preserve">
     <value>Event Types</value>
   </data>
+  <data name="EXPORT_ERROR" xml:space="preserve">
+    <value>Export Failed</value>
+  </data>
   <data name="FILEMENU_EXPORT_SUMMARY" xml:space="preserve">
     <value>Can Not Save Summary Data</value>
+  </data>
+  <data name="FILEMENU_OPEN_LOG" xml:space="preserve">
+    <value>Open Log File</value>
   </data>
   <data name="FILEMENU_SAVE_FIGHTS" xml:space="preserve">
     <value>Can Not Save Selected Fights</value>
   </data>
+  <data name="IMPORT_ERROR" xml:space="preserve">
+    <value>Import Failed</value>
+  </data>
   <data name="LINES_FILTERED" xml:space="preserve">
     <value>Lines (Filtered)</value>
+  </data>
+  <data name="LINE_TYPES_SELECTED" xml:space="preserve">
+    <value>Types</value>
   </data>
   <data name="LOG_FILTER_TEXT" xml:space="preserve">
     <value>Results Filter</value>
@@ -199,8 +232,20 @@
   <data name="PAL" xml:space="preserve">
     <value>Paladin</value>
   </data>
+  <data name="RECEIVED_GINA" xml:space="preserve">
+    <value>Received GINA Triggers</value>
+  </data>
+  <data name="RECEIVED_SHARE" xml:space="preserve">
+    <value>Received Quick Share</value>
+  </data>
+  <data name="RESET_WINDOW_STATE" xml:space="preserve">
+    <value>Reset Window State</value>
+  </data>
   <data name="RESTART_NEEDED" xml:space="preserve">
     <value>Restart Required</value>
+  </data>
+  <data name="RESTORE_FROM_BACKUP" xml:space="preserve">
+    <value>Restore From Backup</value>
   </data>
   <data name="RESTORE_TABLE_COLUMNS" xml:space="preserve">
     <value>Default Table Columns Restored!</value>
@@ -220,6 +265,12 @@
   <data name="SHARE_DPS_TOO_BIG" xml:space="preserve">
     <value>Exceeded Copy/Paste Limit for EQ</value>
   </data>
+  <data name="SHARE_ERROR" xml:space="preserve">
+    <value>Quick Share Failed</value>
+  </data>
+  <data name="SHARE_MESSAGE" xml:space="preserve">
+    <value>Quick Share</value>
+  </data>
   <data name="SHD" xml:space="preserve">
     <value>Shadow Knight</value>
   </data>
@@ -232,11 +283,26 @@
   <data name="SPELL_TYPES_SELECTED" xml:space="preserve">
     <value>Spell Types</value>
   </data>
+  <data name="TRIGGER_CHARACTER_DELETE" xml:space="preserve">
+    <value>Delete Character Settings</value>
+  </data>
+  <data name="TRIGGER_SEARCH_TEXT" xml:space="preserve">
+    <value>Trigger Search</value>
+  </data>
+  <data name="UNASSIGN_OVERLAY" xml:space="preserve">
+    <value>Unassign Overlay</value>
+  </data>
+  <data name="UNSAVED" xml:space="preserve">
+    <value>Unsaved Changes</value>
+  </data>
   <data name="UNSELECT_ALL" xml:space="preserve">
     <value>Unselect All</value>
   </data>
   <data name="WAR" xml:space="preserve">
     <value>Warrior</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="WIZ" xml:space="preserve">
     <value>Wizard</value>

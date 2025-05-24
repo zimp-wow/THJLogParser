@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="EQLogParser.TriggersTester"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             mc:Ignorable="d"
+             Loaded="ContentLoaded"
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="{DynamicResource EQGridTitleHeight}" />
+      <RowDefinition Height="100*" />
+    </Grid.RowDefinitions>
+    <StackPanel Orientation="Horizontal" Grid.Row="0">
+      <Label x:Name="theLabel" Content="Trigger Settings for:" Style="{StaticResource EQTitleStyle}" Visibility="Collapsed" />
+      <ComboBox x:Name="characterList" DisplayMemberPath="Name" SelectedIndex="0" Margin="8,0,0,2" Visibility="Collapsed"/>
+      <Label x:Name="theBasicLabel" Style="{StaticResource EQTitleStyle}" Visibility="Collapsed"/>
+      <Button x:Name="testButton" Margin="8,1,0,0" Height="{DynamicResource EQButtonHeight}" Padding="12,0,12,0" Click="TestTriggersClick">Run Test</Button>
+      <Button x:Name="clearButton" Margin="8,1,0,0" Height="{DynamicResource EQButtonHeight}" Padding="12,0,12,0" Click="ClearTextClick">Clear Text</Button>
+      <CheckBox x:Name="realTime" Template="{StaticResource CustomCheckBoxTemplate}" Margin="8,1,0,2" Content="Real-Time"/>
+      <TextBlock x:Name="testStatus" VerticalAlignment="Center" Visibility="Collapsed" Margin="7,1,0,0" Text="" />
+    </StackPanel>
+    <syncfusion:EditControl x:Name="testTriggersBox" Grid.Row="1" IsAutoLineNumberAreaWidthEnabled="False" LineNumberAreaWidth="65" EnableIntellisense="False" IsTrackChangesEnabled="False" 
+            ShowFindAndReplace="False" DocumentLanguage="Text" AllowDragDrop="False" AllowDrop="False" ModifiedLineIndicatorBrush="Transparent" ShowBlockIndicatorLine="False" ShowDefaultContextMenu="False" VerticalContentAlignment="Top" FontSize="{DynamicResource EQTitleSize}" BorderThickness="1" Text="[Fri Feb 03 20:27:50 2023] You paste lines from your log file here and click Run Test."></syncfusion:EditControl>
+  </Grid>
+</UserControl>

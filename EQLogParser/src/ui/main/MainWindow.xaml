@@ -48,51 +48,19 @@
       <Image Source="Logparsericon.ico" Height="50" Width="50" Margin="8,0,16,0" VerticalAlignment="Center"/>
       <Menu Height="30" FontSize="13" Margin="0,0,0,2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Style="{StaticResource EQMenuStyle}">
         <MenuItem Header="File" Height="30" Style="{StaticResource MenuHeaderStyle}">
-          <MenuItem Header="Monitor Log File" Height="24" Click="MenuItemSelectMonitorLogFileClick" ToolTip="Monitor Log File for changes">
-            <MenuItem.Icon>
-              <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_Eye" />
-            </MenuItem.Icon>
+          <MenuItem x:Name="fileOpenMenu" Header="Open and Monitor _Log File" ToolTip="Open Log File, Archive Chat and Start Monitoring">
+              <MenuItem.Icon>
+                  <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_FolderOpen" />
+              </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Open and Monitor _Log File" Height="24" ToolTip="Open Log File, Archive Chat and Start Monitoring" Style="{StaticResource MenuItemStyle}">
-            <MenuItem.Icon>
-              <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_FolderOpen" />
-            </MenuItem.Icon>
-            <MenuItem Header="Last Hour" Tag="1" Height="24" Click="MenuItemSelectLogFileClick">
-              <MenuItem.Icon>
-                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_CalendarDay" />
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="Last  8 Hours" Tag="8" Height="24" Click="MenuItemSelectLogFileClick">
-              <MenuItem.Icon>
-                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_CalendarDay" />
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="Last 24 Hours" Tag="24 " Height="24" Click="MenuItemSelectLogFileClick">
-              <MenuItem.Icon>
-                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_CalendarDay" />
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="Last  7 Days" Tag="168" Height="24" Click="MenuItemSelectLogFileClick">
-              <MenuItem.Icon>
-                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_CalendarAlt" />
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="Last 14 Days" Tag="336" Height="24" Click="MenuItemSelectLogFileClick">
-              <MenuItem.Icon>
-                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_CalendarAlt" />
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="Last 30 Days" Tag="720" Height="24" Click="MenuItemSelectLogFileClick">
-              <MenuItem.Icon>
-                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_CalendarAlt" />
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="Everything" Height="24" Click="MenuItemSelectLogFileClick">
-              <MenuItem.Icon>
-                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_Infinity" />
-              </MenuItem.Icon>
-            </MenuItem>
-          </MenuItem>
+          <Separator x:Name="recentSeparator" Visibility="Collapsed" />
+          <MenuItem x:Name="recent1File" Visibility="Collapsed" Tag="0" />
+          <MenuItem x:Name="recent2File" Visibility="Collapsed" Tag="1" />
+          <MenuItem x:Name="recent3File" Visibility="Collapsed" Tag="2" />
+          <MenuItem x:Name="recent4File" Visibility="Collapsed" Tag="3" />
+          <MenuItem x:Name="recent5File" Visibility="Collapsed" Tag="4" />
+          <MenuItem x:Name="recent6File" Visibility="Collapsed" Tag="5" />
+          <Separator/>
           <Separator/>
           <MenuItem Header="_Save" Height="24">
             <MenuItem.Icon>
@@ -127,11 +95,6 @@
                 <fa:ImageAwesome x:Name="damageSummaryIcon" Tag="damageSummaryWindow" Loaded="WindowIconLoaded" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
               </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="enableDamageOverlay" Header="Damage _Overlay" Click="ToggleDamageOverlayClick" Height="24">
-              <MenuItem.Icon>
-                <fa:ImageAwesome x:Name="enableDamageOverlayIcon" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
-              </MenuItem.Icon>
-            </MenuItem>
           </MenuItem>
           <MenuItem x:Name="healingView" Header="_Healing" Height="24" Style="{StaticResource MenuItemStyle}">
             <MenuItem.Icon>
@@ -164,7 +127,28 @@
             </MenuItem>
           </MenuItem>
           <Separator />
-          <MenuItem x:Name="playerDataView" Header="_Events" Height="24" Style="{StaticResource MenuItemStyle}">
+          <MenuItem Header="Damage _Meter" Style="{StaticResource MenuItemStyle}">
+            <MenuItem.Icon>
+              <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_ThermometerHalf" />
+            </MenuItem.Icon>
+            <MenuItem x:Name="enableDamageOverlay" Header="Enable _Meter" Click="ToggleDamageOverlayClick" Style="{StaticResource MenuItemStyle}">
+              <MenuItem.Icon>
+                <fa:ImageAwesome x:Name="enableDamageOverlayIcon" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Reset Position" Click="ResetOverlayClick" Style="{StaticResource MenuItemStyle}">
+              <MenuItem.Icon>
+                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_LocationArrow" />
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Setup" Click="ConfigureOverlayClick" Style="{StaticResource MenuItemStyle}">
+              <MenuItem.Icon>
+                <fa:ImageAwesome Style="{StaticResource EQIconStyle}" Icon="Solid_Cog" />
+              </MenuItem.Icon>
+            </MenuItem>
+          </MenuItem>
+          <Separator />
+          <!--<MenuItem x:Name="playerDataView" Header="_Events" Height="24" Style="{StaticResource MenuItemStyle}">
             <MenuItem.Icon>
               <fa:ImageAwesome x:Name="playerDataViewIcon" Style="{StaticResource EQIconStyle}" Icon="Solid_Table" />
             </MenuItem.Icon>
@@ -183,8 +167,33 @@
                 <fa:ImageAwesome x:Name="eventIcon" Tag="specialEventsWindow" Loaded="WindowIconLoaded" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
               </MenuItem.Icon>
             </MenuItem>
+          </MenuItem>-->
+          <MenuItem x:Name="triggers" Header="T_riggers" Style="{StaticResource MenuItemStyle}">
+            <MenuItem.Icon>
+              <fa:ImageAwesome x:Name="triggrsViewIcon" Style="{StaticResource EQIconStyle}" Icon="Regular_FileAudio" />
+            </MenuItem.Icon>
+            <MenuItem x:Name="triggersMenuItem" Header="_Trigger Manager" Click="MenuItemWindowClick" Style="{StaticResource MenuItemStyle}">
+              <MenuItem.Icon>
+                <fa:ImageAwesome x:Name="triggersIcon" Tag="triggersWindow" Loaded="WindowIconLoaded" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="triggerTestMenuItem" Header="Trigger _Tester" Click="MenuItemWindowClick" Style="{StaticResource MenuItemStyle}">
+              <MenuItem.Icon>
+                <fa:ImageAwesome x:Name="triggerTestIcon" Tag="triggerTestWindow" Loaded="WindowIconLoaded" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="triggerLogMenuItem" Header="Trigger _Log" Click="MenuItemWindowClick" Style="{StaticResource MenuItemStyle}">
+              <MenuItem.Icon>
+                <fa:ImageAwesome x:Name="triggerLogIcon" Tag="triggerLogWindow" Loaded="WindowIconLoaded" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="quickShareLogMenuItem" Header="Quick _Share Log" Click="MenuItemWindowClick" Style="{StaticResource MenuItemStyle}">
+              <MenuItem.Icon>
+                <fa:ImageAwesome x:Name="quickShareLogIcon" Tag="quickShareLogWindow" Loaded="WindowIconLoaded" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
-          <MenuItem x:Name="searchView" Header="_Search" Height="24" Style="{StaticResource MenuItemStyle}">
+          <!--<MenuItem x:Name="searchView" Header="_Search" Height="24" Style="{StaticResource MenuItemStyle}">
             <MenuItem.Icon>
               <fa:ImageAwesome x:Name="searchViewIcon" Style="{StaticResource EQIconStyle}" Icon="Solid_Search" />
             </MenuItem.Icon>
@@ -199,7 +208,7 @@
                 <fa:ImageAwesome x:Name="chatIcon" Tag="chatWindow" Loaded="WindowIconLoaded" Style="{StaticResource EQIconStyle}" Visibility="Hidden" Icon="Solid_Check" />
               </MenuItem.Icon>
             </MenuItem>
-          </MenuItem>
+          </MenuItem>-->
           <MenuItem x:Name="statsView" Header="S_tatistics" Height="24" Style="{StaticResource MenuItemStyle}">
             <MenuItem.Icon>
               <fa:ImageAwesome x:Name="statsViewIcon" Style="{StaticResource EQIconStyle}" Icon="Solid_Calculator" />
@@ -338,6 +347,8 @@
           </MenuItem>
         </MenuItem>
       </Menu>
+      <TextBlock x:Name="initialText" Margin="100,0,0,0" Visibility="Hidden" Text="" VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{DynamicResource EQGoodForegroundBrush}"/>
+      <TextBlock x:Name="statusTriggersText" Margin="0,0,4,0" Visibility="Collapsed" VerticalAlignment="Center" IsHitTestVisible="False"  Text="Triggers Active " Foreground="{DynamicResource EQGoodForegroundBrush}"/>
       <TextBlock x:Name="statusText" Margin="40,0,4,0" VerticalAlignment="Center"/>
       <TextBlock x:Name="fileText" Margin="4,0,4,0" VerticalAlignment="Center" Foreground="{DynamicResource ContentForegroundAlt}"/>
     </listCollection:ArrayList>
