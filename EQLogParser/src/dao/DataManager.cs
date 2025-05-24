@@ -124,11 +124,10 @@ namespace EQLogParser
     private readonly ConcurrentDictionary<string, string> SpellAbbrvCache = new ConcurrentDictionary<string, string>();
     private readonly ConcurrentDictionary<string, string> RanksCache = new ConcurrentDictionary<string, string>();
     private readonly ConcurrentDictionary<string, string> TitleToClass = new ConcurrentDictionary<string, string>();
-    private readonly ConcurrentDictionary<long, Fight> _overlayFights = new();
 
     private int LastSpellIndex = -1;
 
-    internal bool HasOverlayFights() => !_overlayFights.IsEmpty;
+    internal bool HasOverlayFights() => !OverlayFights.IsEmpty;
     private DataManager()
     {
       DictionaryUniqueListHelper<string, SpellData> helper = new DictionaryUniqueListHelper<string, SpellData>();
@@ -301,7 +300,7 @@ namespace EQLogParser
             }
 
             var removeList = new List<long>();
-            foreach (var fight in _overlayFights.Values)
+            foreach (var fight in OverlayFights.Values)
             {
                 if (fight != null && (groupId == -1 || fight.GroupId != groupId))
                 {
@@ -316,7 +315,7 @@ namespace EQLogParser
     internal void AddMiscRecord(IAction action, double beginTime) => Helpers.AddAction(AllMiscBlocks, action, beginTime);
     internal void AddReceivedSpell(ReceivedSpell received, double beginTime) => Helpers.AddAction(AllReceivedSpellBlocks, received, beginTime);
     internal List<Fight> GetOverlayFights() => OverlayFights.Values.ToList();
-    internal void RemoveOverlayFight(long id) => _overlayFights.Remove(id, out _);
+    internal void RemoveOverlayFight(long id) => OverlayFights.Remove(id, out _);
     internal List<ActionBlock> GetAllLoot() => AllLootBlocks.ToList();
     internal List<ActionBlock> GetAllRandoms() => AllRandomBlocks.ToList();
     internal string GetClassFromTitle(string title) => TitleToClass.ContainsKey(title) ? TitleToClass[title] : null;
