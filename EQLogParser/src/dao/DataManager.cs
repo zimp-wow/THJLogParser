@@ -757,7 +757,7 @@ namespace EQLogParser
             {
                 ID              = thj.ID.ToString( ),
                 Name            = thj.Name,
-                NameAbbrv       = "",
+                NameAbbrv       = thj.Name,
                 Level           = (byte) THJSpellParser.GetLowestLevel( thj ),
                 Duration        = (ushort) duration,
                 IsBeneficial    = thj.Beneficial,
