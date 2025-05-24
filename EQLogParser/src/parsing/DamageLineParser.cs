@@ -488,7 +488,7 @@ namespace EQLogParser
                       if( DataManager.Instance.GetDamagingSpellByName( spellname ) is SpellData spellData && spellData != null )
                       {
                         resist = spellData.Resist;
-                        spelltype   = ( spellData.Duration > 0 ) ? Labels.DOT: Labels.DD;
+                        spelltype   = ( spellData.Duration > 0 && !string.IsNullOrEmpty(spellData.WearOff)) ? Labels.DOT: Labels.DD;
 					  }
                   }
                   else
