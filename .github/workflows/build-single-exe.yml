@@ -1,12 +1,8 @@
 name: Build Single Executable
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
   workflow_dispatch:
-    # Allow manual triggering of the workflow
+    # Only manual triggering of the workflow
 
 jobs:
   build:
@@ -238,8 +234,7 @@ jobs:
 
       - name: Create GitHub Release
         id: create_release
-        # Only run on push to master, not on PRs
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        # Always create release since this is manually triggered
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
