@@ -1,5 +1,13 @@
 # THJLogParser Changelog
 
+## Version 1.0.1.0 - May 24, 2025
+
+### New Features
+
+- **Auto-load Recent Log**: Parser now automatically loads your most recently-opened log file when started
+- **In-game Damage Meter**: Damage meter overlay now functions including configuration (available via View -> Damage Meter menu)
+- **BETA: Gina Triggers**: Trigger functionality now available via View -> Triggers menu. This functionality is very much in BETA stage due to its complexity
+
 ## Version 1.0.0.0
 
 ### New Features
