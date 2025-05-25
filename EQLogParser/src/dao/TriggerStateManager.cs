@@ -472,9 +472,12 @@ namespace EQLogParser
           var tree = _db.GetCollection<TriggerNode>(TreeCol);
           foreach (var node in tree.FindAll().Where(n => n.TriggerData != null).ToArray())
           {
-            if (node.Id is { } id && state.Enabled.TryGetValue(id, out var value) && value == true)
+            if (state.Enabled.TryGetValue(node.Id, out var value))
             {
-              result.Add(new OtData { Id = node.Id, Name = node.Name, Trigger = node.TriggerData, OverlayData = node.OverlayData });
+              if (value == true)
+              {
+                  result.Add(new OtData { Id = node.Id, Name = node.Name, Trigger = node.TriggerData, OverlayData = node.OverlayData });
+              }
             }
           }
         }

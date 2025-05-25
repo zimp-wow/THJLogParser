@@ -33,7 +33,7 @@ namespace EQLogParser
     {
       lock (TankingGroupIds)
       {
-        DataManager.Instance.EventsClearedActiveData += (object sender, bool e) =>
+        DataManager.Instance.EventsClearedActiveData += (bool e) =>
         {
           Reset();
         };

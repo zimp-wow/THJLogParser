@@ -115,7 +115,7 @@ namespace EQLogParser
 
               if (_theConfig != null)
               {
-                _buffer = new BlockingCollection<Tuple<string, double, bool>>(new ConcurrentQueue<Tuple<string, double, bool>>());
+                _buffer = new BlockingCollection<Tuple<string, double, bool>>(new System.Collections.Concurrent.ConcurrentQueue<Tuple<string, double, bool>>());
                 await TriggerManager.Instance.SetTestProcessor(_theConfig, _buffer);
               }
             }
@@ -131,7 +131,7 @@ namespace EQLogParser
                   await TriggerManager.Instance.StopTestProcessor();
                 }
 
-                _buffer = new BlockingCollection<Tuple<string, double, bool>>(new ConcurrentQueue<Tuple<string, double, bool>>());
+                _buffer = new BlockingCollection<Tuple<string, double, bool>>(new System.Collections.Concurrent.ConcurrentQueue<Tuple<string, double, bool>>());
                 await TriggerManager.Instance.SetTestProcessor(character, _buffer);
               }
               else

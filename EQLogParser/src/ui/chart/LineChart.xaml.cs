@@ -51,7 +51,7 @@ namespace EQLogParser
       Reset();
     }
 
-    private void EventsClearedActiveData(object sender, bool cleared) => Clear();
+    private void EventsClearedActiveData(bool cleared) => Clear();
 
     internal void Clear()
     {

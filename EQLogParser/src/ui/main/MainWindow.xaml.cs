@@ -559,27 +559,27 @@ namespace EQLogParser
     {
       if (e.Source == damageChartMenuItem)
       {
-        OpenDamageChart();
+        DynamicMenuItemWindowClick(sender, e);//OpenDamageChart();
       }
       else if (e.Source == healingChartMenuItem)
       {
-        OpenHealingChart();
+        DynamicMenuItemWindowClick(sender, e);//OpenHealingChart();
       }
       else if (e.Source == tankingChartMenuItem)
       {
-        OpenTankingChart();
+        DynamicMenuItemWindowClick(sender, e);//OpenTankingChart();
       }
       else if (e.Source == damageSummaryMenuItem)
       {
-        OpenDamageSummary();
+        DynamicMenuItemWindowClick(sender, e);//OpenDamageSummary();
       }
       else if (e.Source == healingSummaryMenuItem)
       {
-        OpenHealingSummary();
+        DynamicMenuItemWindowClick(sender, e);//OpenHealingSummary();
       }
       else if (e.Source == tankingSummaryMenuItem)
       {
-        OpenTankingSummary();
+        DynamicMenuItemWindowClick(sender, e);//OpenTankingSummary();
       }
       else if (e.Source == triggersMenuItem)
       {
@@ -1107,28 +1107,29 @@ namespace EQLogParser
 
     // This is where closing summary tables and line charts will get disposed
     private void CloseTab(ContentControl window)
-    {
-      var content = window.Content;
-      if (content is EQLogViewer)
-      {
-        string title = DockingManager.GetHeader(window) as string;
-        int last = title.LastIndexOf(" ");
-        if (last > -1)
         {
-          string value = title.Substring(last, title.Length - last);
-          if (int.TryParse(value, out int result) && result > 0 && LogWindows.Count >= result)
-          {
-            LogWindows[result - 1] = false;
-          }
-        }
+            if (window.Content is EQLogViewer)
+            {
+                if (DockingManager.GetHeader(window) is string title)
+                {
+                    var last = title.LastIndexOf(' ');
+                    if (last > -1)
+                    {
+                        var value = title[last..];
+                        if (int.TryParse(value, out var result) && result > 0 && LogWindows.Count >= result)
+                        {
+                            LogWindows[result - 1] = false;
+                        }
+                    }
+                }
 
-        (window.Content as IDisposable)?.Dispose();
-      }
-      else
-      {
-        Helpers.CloseWindow(dockSite, window);
-      }
-    }
+              (window.Content as IDisposable)?.Dispose();
+            }
+            else
+            {
+                SyncFusionUtil.CloseWindow(dockSite, window);
+            }
+        }
 
     private void dockSite_CloseButtonClick(object sender, CloseButtonEventArgs e) => CloseTab(e.TargetItem as ContentControl);
 
