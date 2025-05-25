@@ -460,8 +460,8 @@ namespace EQLogParser
         TriggerStateManager.Instance.UpdateLastTriggered(wrapper.Id, updatedTime);
         wrapper.TriggerData.LastTriggered = updatedTime;
       }
-
-      if (ProcessMatchesText(wrapper.ModifiedTimerName, matches) is { } displayName)
+      var coalesceDisplayName = (!string.IsNullOrEmpty(wrapper.ModifiedDisplay)) ? wrapper.ModifiedDisplay : wrapper.ModifiedTimerName;
+      if (ProcessMatchesText(coalesceDisplayName, matches) is { } displayName)
       {
         displayName = ProcessMatchesText(displayName, previousMatches);
         displayName = ModLine(displayName, lineData.Action);
@@ -928,9 +928,9 @@ namespace EQLogParser
 
             activeTriggers.Add(wrapper);
           }
-          catch (Exception)
+          catch (Exception ex)
           {
-            // Log.Debug("Bad Trigger?", ex);
+             Log.Debug("Bad Trigger?", ex);
           }
         }
       }

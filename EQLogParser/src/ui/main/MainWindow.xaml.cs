@@ -22,6 +22,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using EQLogParser.util;
 using Microsoft.VisualBasic.Logging;
+using System.Xml;
 
 namespace EQLogParser
 {
@@ -63,7 +64,7 @@ namespace EQLogParser
     private static LogOption CurrentLogOption;
     private DamageOverlayWindow _damageOverlay;
 
-    private readonly DispatcherTimer ComputeStatsTimer;
+    private DispatcherTimer ComputeStatsTimer;
     private ChatManager PlayerChatManager => ChatManager.Instance;
     private readonly NpcDamageManager NpcDamageManager = new NpcDamageManager();
     private DocumentTabControl ChartTab = null;
@@ -131,14 +132,7 @@ namespace EQLogParser
         // update titles
         versionText.Text = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 
-        MainActions.InitPetOwners(this, petMappingGrid, ownerList, petMappingWindow);
-        MainActions.InitVerifiedPlayers(this, verifiedPlayersGrid, classList, verifiedPlayersWindow, petMappingWindow);
-        MainActions.InitVerifiedPets(this, verifiedPetsGrid, verifiedPetsWindow, petMappingWindow);
-
-        (npcWindow.Content as FightTable).EventsSelectionChange += (_, __) => ComputeStats();
-        DamageStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(damageChartIcon.Tag as string, data));
-        HealingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(healingChartIcon.Tag as string, data));
-        TankingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(tankingChartIcon.Tag as string, data));
+        
 
         UpdateDeleteChatMenu();
         MainActions.SetMainWindow(this);
@@ -175,31 +169,11 @@ namespace EQLogParser
         IsHideOnMinimizeEnabled = ConfigUtil.IfSet("HideWindowOnMinimize");
         enableHideOnMinimizeIcon.Visibility = IsHideOnMinimizeEnabled ? Visibility.Visible : Visibility.Hidden;
 
-                // Damage Overlay
-                enableDamageOverlayIcon.Visibility = Visibility.Hidden;// OverlayUtil.LoadSettings() ? Visibility.Visible : Visibility.Hidden;
+        // Damage Overlay
+        enableDamageOverlayIcon.Visibility = Visibility.Hidden;// OverlayUtil.LoadSettings() ? Visibility.Visible : Visibility.Hidden;
 
         LOG.Info("Initialized Components");
 
-        if (ConfigUtil.IfSet("AutoMonitor"))
-        {
-          enableAutoMonitorIcon.Visibility = Visibility.Visible;
-          var previousFile = ConfigUtil.GetSetting("LastOpenedFile");
-          if (File.Exists(previousFile))
-          {
-            OpenLogFile(LogOption.MONITOR, previousFile);
-          }
-        }
-        else
-        {
-          enableAutoMonitorIcon.Visibility = Visibility.Hidden;
-        }
-
-        ComputeStatsTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 500) };
-        ComputeStatsTimer.Tick += (sender, e) =>
-        {
-          ComputeStats();
-          ComputeStatsTimer.Stop();
-        };
 
         MainActions.CreateOpenLogMenuItems(fileOpenMenu, MenuItemSelectLogFileClick);
 
@@ -243,6 +217,62 @@ namespace EQLogParser
         LOG.Info($"Application Startup Time: {(App.eTime - App.sTime)}");
       }
     }
+
+    private async void MainWindowOnLoaded(object sender, RoutedEventArgs args)
+        {
+            // make sure file exists
+            if (File.Exists(ConfigUtil.ConfigDir + "/dockSite.xml"))
+            {
+                try
+                {
+                    var reader = XmlReader.Create(ConfigUtil.ConfigDir + "/dockSite.xml");
+                    dockSite.LoadDockState(reader);
+                    ConfigUtil.UpdateStatus("Layout Restored");
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    LOG.Debug("Error reading docSite.xml", ex);
+                    dockSite.ResetState();
+                }
+            }
+            MainActions.InitPetOwners(this, petMappingGrid, ownerList, petMappingWindow);
+            MainActions.InitVerifiedPlayers(this, verifiedPlayersGrid, classList, verifiedPlayersWindow, petMappingWindow);
+            MainActions.InitVerifiedPets(this, verifiedPetsGrid, verifiedPetsWindow, petMappingWindow);
+
+            (npcWindow.Content as FightTable).EventsSelectionChange += (_, __) => ComputeStats();
+            DamageStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(damageChartIcon.Tag as string, data));
+            HealingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(healingChartIcon.Tag as string, data));
+            TankingStatsManager.Instance.EventsUpdateDataPoint += (_, data) => Dispatcher.InvokeAsync(() => HandleChartUpdate(tankingChartIcon.Tag as string, data));
+
+            
+
+            ComputeStatsTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 500) };
+            ComputeStatsTimer.Tick += (sender, e) =>
+            {
+                ComputeStats();
+                ComputeStatsTimer.Stop();
+            };
+            // Init Trigger Manager
+            await TriggerManager.Instance.StartAsync();
+            ConfigUtil.UpdateStatus("Trigger Manager Started");
+            await Task.Delay(100);
+
+            // check need monitor
+            if (ConfigUtil.IfSet("AutoMonitor"))
+            {
+                enableAutoMonitorIcon.Visibility = Visibility.Visible;
+                var previousFile = ConfigUtil.GetSetting("LastOpenedFile");
+                if (File.Exists(previousFile))
+                {
+                    OpenLogFile(LogOption.MONITOR, previousFile);
+                }
+            }
+            else
+            {
+                enableAutoMonitorIcon.Visibility = Visibility.Hidden;
+            }
+        }
 
     internal void CopyToEQClick(string type) => (playerParseTextWindow.Content as ParsePreview)?.CopyToEQClick(type);
     internal FightTable GetFightTable() => npcWindow?.Content as FightTable;

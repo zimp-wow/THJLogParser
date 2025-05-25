@@ -761,12 +761,6 @@ namespace EQLogParser
     }
     internal class TriggerTreeViewNode : TreeViewNode
     {
-        public override string ToString()
-        {
-            return $"{this.Content}";
-        }
-        public string Name { get { return SerializedData?.Name; } }
-
         public TriggerNode SerializedData { get; set; }
         public bool IsTrigger() => SerializedData?.TriggerData != null;
         public bool IsOverlay() => SerializedData?.OverlayData != null;
