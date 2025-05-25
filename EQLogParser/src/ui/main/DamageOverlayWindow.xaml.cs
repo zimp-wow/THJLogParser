@@ -144,7 +144,7 @@ namespace EQLogParser
       _savedStreamerMode = ConfigUtil.IfSet("OverlayStreamerMode");
       streamer.IsChecked = _savedStreamerMode;
 
-      _currentShowDps = ConfigUtil.IfSet("OverlayShowingDps");
+      _currentShowDps = ConfigUtil.IfSet("OverlayShowingDps", null, true);
       dpsButton.Foreground = _currentShowDps ? ActiveBrush : InActiveBrush;
       tankButton.Foreground = !_currentShowDps ? ActiveBrush : InActiveBrush;
 
