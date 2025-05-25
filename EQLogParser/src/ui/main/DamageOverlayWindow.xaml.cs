@@ -177,6 +177,14 @@ namespace EQLogParser
         border.SetResourceReference(Border.BackgroundProperty, "DamageOverlayBackgroundBrush");
         _updateTimer.Start();
       }
+      if (_currentShowDps)
+      {
+          DpsClick(null, null);
+      }
+      else
+      {
+          TankClick(null, null);
+      }
     }
 
     private async void UpdateTimerTick(object sender, EventArgs e)
