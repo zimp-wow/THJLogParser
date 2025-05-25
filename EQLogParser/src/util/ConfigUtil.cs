@@ -25,7 +25,7 @@ namespace EQLogParser
     private const string PLAYERS_FILE = "players.txt";
 
     private static string ArchiveDir;
-    private static string ConfigDir;
+    internal static string ConfigDir;
     private static string ServerConfigDir;
     private static string SettingsFile;
     private static string _triggersDbFile;

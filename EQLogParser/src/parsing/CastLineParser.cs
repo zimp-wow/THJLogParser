@@ -102,7 +102,7 @@ namespace EQLogParser
           //[Sun Jan 19 16:17:04 2025] Your spell is interrupted.
           //[Sun Jan 19 16:27:49 2025] Zaxsvo's casting is interrupted!
           //Since no spell name in interrupts, having faith this function correctly flags last added spell in AllSpellCastBlocks
-          else if (sList[3].Contains("interrupted"))
+          else if (sList.Count > 3 && sList[3].Contains("interrupted"))
           {
             isInterrupted = true;
 

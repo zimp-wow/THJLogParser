@@ -14,6 +14,7 @@
         ShowTitle="False"
         ShowIcon="False"
         TextOptions.TextFormattingMode="Display"
+        Loaded="MainWindowOnLoaded"
         WindowStartupLocation="Manual"
         StateChanged="WindowStateChanged"
         Icon="pack://application:,,,/src/ui/main/Logparsericon.ico">

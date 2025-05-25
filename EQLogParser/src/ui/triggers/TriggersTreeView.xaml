@@ -148,7 +148,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <CheckBox Grid.Column="0" x:Name="CheckBox" FocusVisualStyle="{x:Null}" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
-                          <TextBlock Grid.Column="1" FontSize="12" VerticalAlignment="Center" Text="{Binding Name}" Margin="25,0,0,0"/>
+                            <TextBlock Grid.Column="1" FontSize="12" VerticalAlignment="Center" Text="{Binding Content, Mode=TwoWay}" Margin="25,0,0,0"/>
                       </Grid>
                   </DataTemplate>
               </syncfusion:SfTreeView.ItemTemplate>
@@ -247,7 +247,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <CheckBox Grid.Column="0" x:Name="CheckBox" FocusVisualStyle="{x:Null}" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
-                          <TextBlock Grid.Column="1" FontSize="12" VerticalAlignment="Center" Text="{Binding Name}" Margin="25,0,0,0"/>
+                          <TextBlock Grid.Column="1" FontSize="12" VerticalAlignment="Center" Text="{Binding Content, Mode=TwoWay}" Margin="25,0,0,0"/>
                       </Grid>
                   </DataTemplate>
               </syncfusion:SfTreeView.ItemTemplate>
