@@ -77,7 +77,7 @@ namespace EQLogParser
     internal event EventHandler<Fight> EventsNewOverlayFight;
     internal event EventHandler<RandomRecord> EventsNewRandomRecord;
     internal event EventHandler<Fight> EventsUpdateFight;
-    internal event EventHandler<bool> EventsClearedActiveData;
+    internal event Action<bool> EventsClearedActiveData;
 
     internal const int MAXTIMEOUT = 60;
     internal const int FIGHTTIMEOUT = 30;
@@ -1064,7 +1064,7 @@ namespace EQLogParser
         NpcTotalSpellCounts.Clear();
         NpcResistStats.Clear();
         ClearActiveAdps();
-        EventsClearedActiveData?.Invoke(this, true);
+        EventsClearedActiveData?.Invoke(true);
       }
     }
 

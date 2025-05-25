@@ -42,6 +42,13 @@ namespace EQLogParser
 
             return Math.Round(totalHeight);
         }
+
+        internal static double GetDpi()
+        {
+            // var dpiTransform = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
+            //dpi = dpiTransform.PixelsPerInchX; // DPI X value
+            return 96.0; // workaround since I think the framework is scaling for us. This was breaking with 4K displays (120 DPI)
+        }
         internal static ReadOnlyCollection<string> GetCommonFontFamilyNames()
         {
             var common = (from fontFamily in GetSystemFontFamilies() where CommonFontFamilies.Contains(fontFamily.Source) select fontFamily.Source).ToList();
@@ -109,21 +116,37 @@ namespace EQLogParser
       }
     }
 
-    internal static void SetComboBoxTitle(ComboBox columns, int count, string value, bool hasSelectAll = false)
-    {
-      if (!(columns.SelectedItem is ComboBoxItemDetails selected))
-      {
-        selected = hasSelectAll ? columns.Items[2] as ComboBoxItemDetails : columns.Items[0] as ComboBoxItemDetails;
-      }
+        internal static void SetComboBoxTitle(ComboBox columns, int count, string value, bool hasSelectAll = false)
+        {
+            if (columns.Items.Count == 0)
+            {
+                columns.SelectedIndex = -1;
+            }
+            else
+            {
+                if (columns.SelectedItem is not ComboBoxItemDetails selected)
+                {
+                    selected = hasSelectAll ? columns.Items[2] as ComboBoxItemDetails : columns.Items[0] as ComboBoxItemDetails;
+                }
 
-      var total = hasSelectAll ? columns.Items.Count - 2 : columns.Items.Count;
-      string countString = total == count ? "All" : count.ToString();
-      selected.SelectedText = countString + " " + value + ((total == count) ? "" : " Selected");
-      columns.SelectedIndex = -1;
-      columns.SelectedItem = selected;
-    }
+                var total = hasSelectAll ? columns.Items.Count - 2 : columns.Items.Count;
+                var countString = total == count ? "All" : count.ToString();
+                var text = countString + " " + value + ((total == count) ? "" : " Selected");
+                if (text[0] == '0')
+                {
+                    text = "No" + text[1..];
+                }
 
-    internal static void SetSize(FrameworkElement element, double height, double width)
+                if (selected != null)
+                {
+                    selected.SelectedText = text;
+                    columns.SelectedIndex = -1;
+                    columns.SelectedItem = selected;
+                }
+            }
+        }
+
+        internal static void SetSize(FrameworkElement element, double height, double width)
     {
       if (!double.IsNaN(height) && element.Height != height)
       {

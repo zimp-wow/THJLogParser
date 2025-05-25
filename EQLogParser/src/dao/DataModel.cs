@@ -368,8 +368,9 @@ namespace EQLogParser
   {
     public string Receiver { get; set; }
     public SpellData SpellData { get; set; }
+        public bool IsWearOff { get; set; }
 
-    public List<SpellData> Ambiguity { get; } = new List<SpellData>();
+        public List<SpellData> Ambiguity { get; } = new List<SpellData>();
   }
 
   internal class SpellCast : ReceivedSpell
@@ -749,6 +750,10 @@ namespace EQLogParser
         public Trigger TriggerData { get; set; }
         public LegacyOverlay OverlayData { get; set; }
     }
+    internal class ActionGroup : TimedAction
+    {
+        public List<IAction> Actions { get; } = [];
+    }
     internal class LegacyOverlay : Overlay
     {
         public string Id { get; set; }
@@ -756,6 +761,12 @@ namespace EQLogParser
     }
     internal class TriggerTreeViewNode : TreeViewNode
     {
+        public override string ToString()
+        {
+            return $"{this.Content}";
+        }
+        public string Name { get { return SerializedData?.Name; } }
+
         public TriggerNode SerializedData { get; set; }
         public bool IsTrigger() => SerializedData?.TriggerData != null;
         public bool IsOverlay() => SerializedData?.OverlayData != null;
