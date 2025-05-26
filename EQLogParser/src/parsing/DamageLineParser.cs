@@ -866,21 +866,27 @@ namespace EQLogParser
       }
       else if (!string.IsNullOrEmpty(name))
       {
-        int pIndex = name.IndexOf("`s ", StringComparison.Ordinal);
-        if ((pIndex > -1 && IsPetOrMount(name, pIndex + 3, out _)) || (pIndex = name.LastIndexOf(" pet", StringComparison.Ordinal)) > -1)
-        {
-          var verifiedPet = PlayerManager.Instance.IsVerifiedPet(name);
-          if (verifiedPet || PlayerManager.IsPossiblePlayerName(name, pIndex))
-          {
-            owner = name.Substring(0, pIndex);
-            hasOwner = true;
+           try
+           {
+               int pIndex = name.IndexOf("`s ", StringComparison.Ordinal);
+               if ((pIndex > -1 && IsPetOrMount(name, pIndex + 3, out _)) || (pIndex = name.LastIndexOf(" pet", StringComparison.Ordinal)) > -1)
+               {
+                   var verifiedPet = PlayerManager.Instance.IsVerifiedPet(name);
+                   if (verifiedPet || PlayerManager.IsPossiblePlayerName(name, pIndex))
+                   {
+                       owner = name.Substring(0, Math.Min(pIndex, name.Length));
+                       hasOwner = true;
 
-            if (!verifiedPet && PlayerManager.Instance.IsVerifiedPlayer(owner))
-            {
-              PlayerManager.Instance.AddVerifiedPet(name);
-            }
-          }
-        }
+                       if (!verifiedPet && PlayerManager.Instance.IsVerifiedPlayer(owner))
+                       {
+                           PlayerManager.Instance.AddVerifiedPet(name);
+                       }
+                   }
+               }
+           }catch (Exception ex)
+           {
+               LOG.Error(ex);
+           }
       }
 
       return hasOwner;

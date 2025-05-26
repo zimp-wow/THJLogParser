@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Newtonsoft.Json;
 using Syncfusion.Windows.Shared;
 using Windows.ApplicationModel.Store;
 
@@ -929,7 +930,9 @@ namespace EQLogParser
           };
         }
       }
+//            System.IO.File.AppendAllText($@"H:\THJ\THJ Log Parser\SpellDictionary.txt", $@"{JsonConvert.SerializeObject(spellData)}
 
+//");
       return spellData;
     }
 
