@@ -203,7 +203,7 @@ namespace EQLogParser
             }
         }
 
-        private void EventsClearedActiveData(object sender, bool cleared)
+        private void EventsClearedActiveData(bool cleared)
         {
             CurrentStats = null;
             dataGrid.ItemsSource = null;
@@ -220,7 +220,7 @@ namespace EQLogParser
                     {
                         HealingStatsManager.Instance.PopulateHealing(CurrentStats);
                         dataGrid.SelectedItems.Clear();
-                        dataGrid.View.RefreshFilter();
+                        dataGrid.View?.RefreshFilter();
 
                         if (!MainWindow.IsAoEHealingEnabled)
                         {

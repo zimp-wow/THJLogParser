@@ -1,5 +1,24 @@
 # THJLogParser Changelog
 
+## Version 1.0.1.0 - May 24, 2025
+
+### New Features
+
+- **Auto-load Recent Log**: Parser now automatically loads your most recently-opened log file when started
+- **In-game Damage Meter**: Damage meter overlay now functions including configuration (available via View -> Damage Meter menu)
+- **Header Menu Consistency**: Header menu consistency cleaned up
+- **TRIGGERS!**: Gina Triggers functionality is now operational via View -> Triggers menu.. Check Wiki for documentation.
+- **DPS Meter Overlay Default**: DPS meter overlay now selects [DPS] by default to correct unintuitive usability on first use
+- **Trigger Panel Resize**: Added resize sliders to Trigger configuration panel edges
+
+### Performance Improvements
+
+- More performance improvements
+
+### Fixes & Improvements
+
+- Fixed damage breakdown auto-sorting so that it actually auto-sorts by total damage when the panel opens rather than lying to you
+
 ## Version 1.0.0.0
 
 ### New Features

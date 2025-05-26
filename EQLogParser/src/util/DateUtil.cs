@@ -12,13 +12,86 @@ namespace EQLogParser
     private double LastDateTime;
     private double increment = 0.0;
 
+    internal static double ToDouble(DateTime dateTime) => dateTime.Ticks / TimeSpan.TicksPerSecond;
+    internal static DateTime FromDouble(double value) => new((long)value * TimeSpan.TicksPerSecond);
     internal static string GetCurrentDate(string format) => DateTime.Now.ToString(format, CultureInfo.InvariantCulture);
-    internal static string FormatDate(double seconds) => new DateTime().AddSeconds(seconds).ToString("ddd MMM dd HH:mm:ss yyyy", CultureInfo.InvariantCulture);
     internal static string FormatSimpleDate(double seconds) => new DateTime().AddSeconds(seconds).ToString("MMM dd HH:mm:ss", CultureInfo.InvariantCulture);
     internal static string FormatSimpleHMS(double seconds) => new DateTime().AddSeconds(seconds).ToString("HH:mm:ss", CultureInfo.InvariantCulture);
-    internal static string FormatSimpleMS(double seconds) => new DateTime().AddSeconds(seconds).ToString("mm:ss", CultureInfo.InvariantCulture);
+    internal static double StandardDateToDouble(string source) => ToDouble(ParseStandardDate(source));
+    internal static DateTime ParseStandardDate(string source) => CustomDateTimeParser("MMM dd HH:mm:ss yyyy", source, 5);
+    
+    internal static string FormatSimpleMS(long ticks)
+    {
+        if (ticks < 0) ticks = 0; // Ensure non-negative ticks.
 
-    internal static string FormatGeneralTime(double seconds, bool showSeconds = false)
+        // Convert ticks to total seconds and round to the nearest second.
+        var totalSeconds = (long)Math.Round((double)ticks / TimeSpan.TicksPerSecond);
+
+        var hours = totalSeconds / 3600; // Find total hours.
+        var minutes = totalSeconds % 3600 / 60; // Find remaining minutes.
+        var seconds = totalSeconds % 60; // Find remaining seconds.
+        return (hours > 0)
+            ? $"{hours:D2}:{minutes:D2}:{seconds:D2}"
+            : $"{minutes:D2}:{seconds:D2}";
+    }
+
+        internal static uint SimpleTimeToSeconds(string source)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return 0;
+            }
+
+            uint h = 0, m = 0, s = 0;
+
+            var split = source.Split(':');
+
+            if (split.Length is 0 or > 3)
+            {
+                return 0;
+            }
+
+            if (split.Length == 1)
+            {
+                s = StatsUtil.ParseUInt(split[0], 0);
+            }
+            else if (split.Length == 2)
+            {
+                m = StatsUtil.ParseUInt(split[0], 0);
+                s = StatsUtil.ParseUInt(split[1], 0);
+
+                if (s > 59 || m > 59)
+                {
+                    return 0;
+                }
+            }
+            else if (split.Length == 3)
+            {
+                h = StatsUtil.ParseUInt(split[0], 0);
+                m = StatsUtil.ParseUInt(split[1], 0);
+                s = StatsUtil.ParseUInt(split[2], 0);
+
+                if (s > 59 || m > 59 || h > 23)
+                {
+                    return 0;
+                }
+            }
+
+            // Convert to total seconds
+            return s + (m * 60) + (h * 60 * 60);
+        }
+        internal static string FormatSimpleMillis(long ticks)
+    {
+        if (ticks < 0) ticks = 0; // Ensure non-negative ticks.
+
+        // Convert ticks to total milliseconds and round to the nearest millisecond.
+        var totalMilliseconds = (long)Math.Round((double)ticks / TimeSpan.TicksPerMillisecond);
+
+        var seconds = totalMilliseconds / 1000 % 60; // Find total seconds, capped at 60.
+        var milliseconds = totalMilliseconds % 1000; // Find remaining milliseconds.
+        return $"{seconds:D2}.{milliseconds:D3}";
+    }
+        internal static string FormatGeneralTime(double seconds, bool showSeconds = false)
     {
       TimeSpan diff = TimeSpan.FromSeconds(seconds);
       string result = "";
@@ -90,10 +163,6 @@ namespace EQLogParser
 
       return result;
     }
-
-    internal static double ToDouble(DateTime dateTime) => dateTime.Ticks / TimeSpan.FromSeconds(1).Ticks;
-
-    internal static DateTime FromDouble(double value) => new DateTime((long)value * TimeSpan.FromSeconds(1).Ticks);
 
     internal bool HasTimeInRange(double now, string line, int lastMins, out double dateTime)
     {

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Windows.Threading;
+using AutoMapper;
 
 namespace EQLogParser
 {
@@ -12,7 +13,8 @@ namespace EQLogParser
   /// </summary>
   public partial class App : Application
   {
-    internal static SplashScreen Splash;
+        internal static IMapper AutoMap;
+        internal static SplashScreen Splash;
         internal static DateTime sTime;
         internal static DateTime eTime;
     protected override void OnStartup(StartupEventArgs e)
@@ -45,7 +47,7 @@ namespace EQLogParser
       var __ = DataManager.Instance;
       Splash.SetStatus("Data loaded...", 90);
       DoEvents();
-
+      AutoMap = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
       Splash.SetStatus("Finalizing...", 95);
       DoEvents();
 
@@ -56,7 +58,9 @@ namespace EQLogParser
       EQLogParser.MainWindow.MWLog.Value.Info($"Splash Loader processing time: {(DateTime.Now - sTime)}");
     }
 
-    private void CloseOverlay_MouseClick(object sender, RoutedEventArgs e) => OverlayUtil.ResetOverlay();
+    private void CloseOverlay_MouseClick(object sender, RoutedEventArgs e)
+        { //=> OverlayUtil.ResetOverlay();
+          }
 
     // Helper method
     private void DoEvents()
@@ -67,7 +71,12 @@ namespace EQLogParser
           new DispatcherOperationCallback(ExitFrame), frame);
       Dispatcher.PushFrame(frame);
     }
-
+        
+    private void DoNothing(object sender, RoutedEventArgs e)
+    {
+      // prevent two events from firing
+      e.Handled = true;
+    }
     private object ExitFrame(object frame)
     {
       ((DispatcherFrame)frame).Continue = false;

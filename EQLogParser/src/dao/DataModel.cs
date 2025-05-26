@@ -1,18 +1,43 @@
-﻿using System;
+﻿using LiteDB;
+using Syncfusion.UI.Xaml.TreeView.Engine;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media.Imaging;
+using System.Windows;
+using System.Windows.Media;
+using AutoMapper;
+using System.Text.RegularExpressions;
+using System.Threading;
+using static EQLogParser.DataManager;
 
 namespace EQLogParser
 {
-  internal interface ISummaryBuilder
+    internal class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            CreateMap<TriggerNode, TriggerNode>();
+            CreateMap<ExportTriggerNode, TriggerNode>();
+            CreateMap<LegacyOverlay, Overlay>();
+            CreateMap<LootRecord, LootRecord>();
+        }
+    }
+    internal interface ISummaryBuilder
   {
     StatsSummary BuildSummary(string type, CombinedStats currentStats, List<PlayerStats> selected, bool showPetLabel, bool showDPS, bool showTotals,
       bool rankPlayers, bool showSpecial, bool showTime, string customTitle);
-  }
+    }
 
-  internal interface IAction { }
+    internal interface IDocumentContent
+    {
+        public void HideContent();
+    }
+
+    internal interface IAction { }
 
   internal class DataPoint
   {
@@ -333,12 +358,19 @@ namespace EQLogParser
     public string Player { get; set; }
   }
 
-  internal class ReceivedSpell : TimedAction
+
+    internal class SpecialRecord : IAction
+    {
+        public string Code { get; set; }
+        public string Player { get; set; }
+    }
+    internal class ReceivedSpell : TimedAction
   {
     public string Receiver { get; set; }
     public SpellData SpellData { get; set; }
+        public bool IsWearOff { get; set; }
 
-    public List<SpellData> Ambiguity { get; } = new List<SpellData>();
+        public List<SpellData> Ambiguity { get; } = new List<SpellData>();
   }
 
   internal class SpellCast : ReceivedSpell
@@ -361,6 +393,7 @@ namespace EQLogParser
     public byte Target { get; set; }
     public ushort ClassMask { get; set; }
     public byte Level { get; set; }
+    public bool HasAmbiguity { get; set; }
     public string LandsOnYou { get; set; }
     public string LandsOnOther { get; set; }
     public bool SongWindow { get; set; }
@@ -381,7 +414,13 @@ namespace EQLogParser
     public Dictionary<string, SpellData> UniqueSpells { get; } = new Dictionary<string, SpellData>();
   }
 
-  internal class OverlayPlayerTotal
+
+    internal class ResistCount
+    {
+        public uint Landed { get; set; }
+        public uint Resisted { get; set; }
+    }
+    internal class OverlayPlayerTotal
   {
     internal long Damage { get; set; }
     internal TimeRange Range { get; set; }
@@ -401,9 +440,17 @@ namespace EQLogParser
     public PlayerStats RaidStats { get; set; }
     public Dictionary<string, byte> UniqueClasses { get; } = new Dictionary<string, byte>();
     public Dictionary<string, List<PlayerStats>> Children { get; } = new Dictionary<string, List<PlayerStats>>();
-  }
+    public double LastUpdateTicks { get; set; }
+    }
 
-  internal class StatsSummary
+
+    internal class NpcResistStats
+    {
+        public ObjectId Id { get; set; }
+        public string Npc { get; set; }
+        public Dictionary<SpellResist, ResistCount> ByResist { get; set; } = new();
+    }
+    internal class StatsSummary
   {
     public string Title { get; set; }
     public string RankedPlayers { get; set; }
@@ -464,4 +511,260 @@ namespace EQLogParser
     public double MinTime { get; set; }
   }
 
+    internal class TimerData
+    {
+        public CancellationTokenSource CancelSource { get; set; }
+        public CancellationTokenSource WarningSource { get; set; }
+        public bool Canceled { get; set; }
+        public bool Warned { get; set; }
+        public string DisplayName { get; set; }
+        public long BeginTicks { get; set; }
+        public long EndTicks { get; set; }
+        public long ResetTicks { get; set; }
+        public long ResetDurationTicks { get; set; }
+        public long DurationTicks { get; set; }
+        public ReadOnlyCollection<string> TimerOverlayIds { get; set; }
+        public int TriggerAgainOption { get; set; }
+        public int TimerType { get; set; }
+        public string Key { get; set; }
+        public string TriggerId { get; set; }
+        public string EndEarlyPattern { get; set; }
+        public string EndEarlyPattern2 { get; set; }
+        public Regex EndEarlyRegex { get; set; }
+        public Regex EndEarlyRegex2 { get; set; }
+        public List<NumberOptions> EndEarlyRegexNOptions { get; set; }
+        public List<NumberOptions> EndEarlyRegex2NOptions { get; set; }
+        public MatchCollection OriginalMatches { get; set; }
+        public MatchCollection PreviousMatches { get; set; }
+        public long RepeatedCount { get; set; } = -1;
+        public string ActiveColor { get; set; }
+        public string FontColor { get; set; }
+        public LineData RepeatingTimerLineData { get; set; }
+        public int TimesToLoopCount { get; set; }
+        public BitmapImage TimerIcon { get; set; }
+    }
+
+    internal class NumberOptions
+    {
+        public uint Value { get; set; }
+        public string Key { get; set; }
+        public string Op { get; set; }
+    }
+    internal class Overlay
+    {
+        public string OverlayComments { get; set; }
+        public string FontSize { get; set; } = "12pt";
+        public int SortBy { get; set; }
+        public int VerticalAlignment { get; set; } = -1;
+        public string FontColor { get; set; } = "#FFFFFFFF";
+        public string FontFamily { get; set; } = "Segoe UI";
+        public string ActiveColor { get; set; } = "#FF1D397E";
+        public string BackgroundColor { get; set; } = "#5F000000";
+        public string IdleColor { get; set; } = "#FF8f1515";
+        public string ResetColor { get; set; } = "#FF8f1515";
+        public string OverlayColor { get; set; } = "#00000000";
+        public double IdleTimeoutSeconds { get; set; }
+        public long FadeDelay { get; set; } = 10;
+        public bool UseStandardTime { get; set; }
+        public bool IsTimerOverlay { get; set; }
+        public bool IsTextOverlay { get; set; }
+        public bool IsDefault { get; set; }
+        public bool ShowActive { get; set; } = true;
+        public bool ShowIdle { get; set; } = true;
+        public bool ShowReset { get; set; } = true;
+        public int TimerMode { get; set; }
+        public long Height { get; set; } = 400;
+        public long Width { get; set; } = 300;
+        public long Top { get; set; } = 200;
+        public long Left { get; set; } = 100;
+    }
+
+    internal class DamageOverlayStats
+    {
+        public CombinedStats DamageStats { get; set; }
+        public CombinedStats TankStats { get; set; }
+        public double LastUpdateTicks { get; set; }
+    }
+
+    internal class PiperVoice
+    {
+        public string Name { get; set; }
+        public string Model { get; set; }
+        public string Config { get; set; }
+        public int Sample { get; set; }
+    }
+
+    internal class PiperVoiceData
+    {
+        public List<PiperVoice> Voices { get; set; }
+    }
+
+
+    internal class OverlayWindowData
+    {
+        public Window TheWindow { get; set; }
+        public long RemoveTicks { get; set; } = -1;
+        public bool IsCooldown { get; set; }
+    }
+    internal class Trigger
+    {
+        public double LastTriggered { get; set; }
+        public string AltTimerName { get; set; }
+        public string Comments { get; set; }
+        public double RepeatedResetTime { get; set; } = 0.75;
+        public double DurationSeconds { get; set; } = 0.2;
+        public bool EnableTimer { get; set; }
+        public int TimerType { get; set; }
+        public string EndEarlyPattern { get; set; }
+        public string EndEarlyPattern2 { get; set; }
+        public bool EndUseRegex { get; set; }
+        public bool EndUseRegex2 { get; set; }
+        public long WorstEvalTime { get; set; } = -1;
+        public string Pattern { get; set; }
+        public string PreviousPattern { get; set; }
+        public long Priority { get; set; } = 3;
+        public int TriggerAgainOption { get; set; }
+        public bool UseRegex { get; set; }
+        public bool PreviousUseRegex { get; set; }
+        public string ActiveColor { get; set; }
+        public string FontColor { get; set; }
+        public string IconSource { get; set; }
+        public List<string> SelectedOverlays { get; set; } = [];
+        public double ResetDurationSeconds { get; set; }
+        public long WarningSeconds { get; set; }
+        public string EndEarlyTextToDisplay { get; set; }
+        public string EndTextToDisplay { get; set; }
+        public string TextToDisplay { get; set; }
+        public string WarningTextToDisplay { get; set; }
+        public string EndEarlyTextToSpeak { get; set; }
+        public string EndTextToSpeak { get; set; }
+        public string TextToSpeak { get; set; }
+        public string WarningTextToSpeak { get; set; }
+        public string SoundToPlay { get; set; }
+        public string EndEarlySoundToPlay { get; set; }
+        public string EndSoundToPlay { get; set; }
+        public string WarningSoundToPlay { get; set; }
+        public string TextToShare { get; set; }
+        public long TimesToLoop { get; set; }
+        public double LockoutTime { get; set; }
+        public int Volume { get; set; } = 4; // no increase
+    }
+
+    internal class TimerOverlayPropertyModel : Overlay
+    {
+        public TimeSpan IdleTimeoutTimeSpan { get; set; }
+        public SolidColorBrush FontBrush { get; set; }
+        public SolidColorBrush ActiveBrush { get; set; }
+        public SolidColorBrush IdleBrush { get; set; }
+        public SolidColorBrush ResetBrush { get; set; }
+        public SolidColorBrush BackgroundBrush { get; set; }
+        public SolidColorBrush OverlayBrush { get; set; }
+        // preview referenced dynamically
+        public string TimerBarPreview { get; set; }
+        public TriggerNode Node { get; set; }
+    }
+
+    internal class TextOverlayPropertyModel : Overlay
+    {
+        public SolidColorBrush FontBrush { get; set; }
+        public SolidColorBrush OverlayBrush { get; set; }
+        public TriggerNode Node { get; set; }
+    }
+
+    internal class TriggerPropertyModel : Trigger
+    {
+        public SolidColorBrush TriggerActiveBrush { get; set; }
+        public SolidColorBrush TriggerFontBrush { get; set; }
+        public BitmapImage TriggerIconSource { get; set; }
+        public ObservableCollection<ComboBoxItemDetails> SelectedTextOverlays { get; set; }
+        public ObservableCollection<ComboBoxItemDetails> SelectedTimerOverlays { get; set; }
+        public TimeSpan DurationTimeSpan { get; set; }
+        public TimeSpan ResetDurationTimeSpan { get; set; }
+        public string SoundOrText { get; set; }
+        public string EndEarlySoundOrText { get; set; }
+        public string EndSoundOrText { get; set; }
+        public string WarningSoundOrText { get; set; }
+        public TriggerNode Node { get; set; }
+        public DependencyObject DataContext { get; set; }
+    }
+
+    internal class TriggerState
+    {
+        [BsonId]
+        public string Id { get; set; }
+        public Dictionary<string, bool?> Enabled { get; set; } = [];
+    }
+
+    internal class TriggerNode
+    {
+        [BsonId]
+        public string Id { get; set; }
+        public bool IsExpanded { get; set; }
+        public string Name { get; set; }
+        public Trigger TriggerData { get; set; }
+        public Overlay OverlayData { get; set; }
+        public int Index { get; set; }
+        public string Parent { get; set; }
+    }
+
+    internal class TriggerCharacter
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string FilePath { get; set; }
+        public bool IsEnabled { get; set; }
+        public string Voice { get; set; }
+        public int VoiceRate { get; set; }
+        public string ActiveColor { get; set; }
+        public string FontColor { get; set; }
+        [BsonIgnore] public bool? IsWaiting { get; set; } = true;
+    }
+
+    internal class TriggerConfig
+    {
+        [BsonId]
+        public string Id { get; set; }
+        public bool IsAdvanced { get; set; }
+        public List<TriggerCharacter> Characters { get; set; } = [];
+        public bool IsEnabled { get; set; }
+        public string Voice { get; set; }
+        public int VoiceRate { get; set; }
+        public int Volume { get; set; }
+    }
+
+    internal class ExportTriggerNode : TriggerNode
+    {
+        public List<ExportTriggerNode> Nodes { get; set; } = [];
+    }
+    internal class LexiconItem
+    {
+        public string Replace { get; set; }
+        public string With { get; set; }
+    }
+    internal class LegacyTriggerNode
+    {
+        public bool? IsEnabled { get; set; } = false;
+        public bool IsExpanded { get; set; }
+        public string Name { get; set; }
+        public List<LegacyTriggerNode> Nodes { get; set; } = [];
+        public Trigger TriggerData { get; set; }
+        public LegacyOverlay OverlayData { get; set; }
+    }
+    internal class ActionGroup : TimedAction
+    {
+        public List<IAction> Actions { get; } = [];
+    }
+    internal class LegacyOverlay : Overlay
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+    internal class TriggerTreeViewNode : TreeViewNode
+    {
+        public TriggerNode SerializedData { get; set; }
+        public bool IsTrigger() => SerializedData?.TriggerData != null;
+        public bool IsOverlay() => SerializedData?.OverlayData != null;
+        public bool IsDir() => !IsOverlay() && !IsTrigger();
+        public bool IsRecentlyMerged { get; set; }
+    }
 }

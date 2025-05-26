@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Newtonsoft.Json;
 using Syncfusion.Windows.Shared;
 using Windows.ApplicationModel.Store;
 
@@ -77,7 +78,7 @@ namespace EQLogParser
     internal event EventHandler<Fight> EventsNewOverlayFight;
     internal event EventHandler<RandomRecord> EventsNewRandomRecord;
     internal event EventHandler<Fight> EventsUpdateFight;
-    internal event EventHandler<bool> EventsClearedActiveData;
+    internal event Action<bool> EventsClearedActiveData;
 
     internal const int MAXTIMEOUT = 60;
     internal const int FIGHTTIMEOUT = 30;
@@ -127,6 +128,7 @@ namespace EQLogParser
 
     private int LastSpellIndex = -1;
 
+    internal bool HasOverlayFights() => !OverlayFights.IsEmpty;
     private DataManager()
     {
       DictionaryUniqueListHelper<string, SpellData> helper = new DictionaryUniqueListHelper<string, SpellData>();
@@ -138,8 +140,8 @@ namespace EQLogParser
       RanksCache["Third"] = "Root";
       RanksCache["Fifth"] = "Root";
       RanksCache["Octave"] = "Root";
-
-      // Player title mapping for /who queries
+      
+        // Player title mapping for /who queries
       ConfigUtil.ReadList(@"data\titles.txt").ForEach(line =>
       {
         string[] split = line.Split('=');
@@ -152,6 +154,7 @@ namespace EQLogParser
           }
         }
       });
+
 
       // Old Spell cache (EQEMU)
       ConfigUtil.ReadEmbeddedList(EQLogParser.Resource.oldspells).ForEach(line => OldSpellNamesDB[line] = true);
@@ -285,10 +288,35 @@ namespace EQLogParser
       PlayerManager.Instance.EventsNewVerifiedPet += (sender, name) => RemoveFight(name);
     }
 
-    internal void AddDeathRecord(DeathRecord record, double beginTime) => Helpers.AddAction(AllDeathBlocks, record, beginTime);
+
+        internal void ResetOverlayFights(bool active = false)
+        {
+            var groupId = (active && !ActiveFights.IsEmpty) ? ActiveFights.Values.First().GroupId : -1;
+            // active is used after the log as been loaded. the overlay opening is displayed so that
+            // FightTable has time to populate the GroupIds. if for some reason not enough time has
+            // elapsed then the IDs will still be 0 so ignore
+            if (groupId == 0)
+            {
+                groupId = -1;
+            }
+
+            var removeList = new List<long>();
+            foreach (var fight in OverlayFights.Values)
+            {
+                if (fight != null && (groupId == -1 || fight.GroupId != groupId))
+                {
+                    fight.PlayerTotals.Clear();
+                    removeList.Add(fight.Id);
+                }
+            }
+
+            removeList.ForEach(RemoveOverlayFight);
+        }
+        internal void AddDeathRecord(DeathRecord record, double beginTime) => Helpers.AddAction(AllDeathBlocks, record, beginTime);
     internal void AddMiscRecord(IAction action, double beginTime) => Helpers.AddAction(AllMiscBlocks, action, beginTime);
     internal void AddReceivedSpell(ReceivedSpell received, double beginTime) => Helpers.AddAction(AllReceivedSpellBlocks, received, beginTime);
     internal List<Fight> GetOverlayFights() => OverlayFights.Values.ToList();
+    internal void RemoveOverlayFight(long id) => OverlayFights.Remove(id, out _);
     internal List<ActionBlock> GetAllLoot() => AllLootBlocks.ToList();
     internal List<ActionBlock> GetAllRandoms() => AllRandomBlocks.ToList();
     internal string GetClassFromTitle(string title) => TitleToClass.ContainsKey(title) ? TitleToClass[title] : null;
@@ -902,7 +930,9 @@ namespace EQLogParser
           };
         }
       }
+//            System.IO.File.AppendAllText($@"H:\THJ\THJ Log Parser\SpellDictionary.txt", $@"{JsonConvert.SerializeObject(spellData)}
 
+//");
       return spellData;
     }
 
@@ -1037,7 +1067,7 @@ namespace EQLogParser
         NpcTotalSpellCounts.Clear();
         NpcResistStats.Clear();
         ClearActiveAdps();
-        EventsClearedActiveData?.Invoke(this, true);
+        EventsClearedActiveData?.Invoke(true);
       }
     }
 

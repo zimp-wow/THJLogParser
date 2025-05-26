@@ -19,20 +19,28 @@ namespace EQLogParser
 
     private static readonly log4net.ILog LOG = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-    private const string APP_DATA = @"%AppData%\EQLogParser";
+    internal const string APP_DATA = @"%AppData%\EQLogParser";
     private const string PETMAP_FILE = "petmapping.txt";
     private const string PETMAP_PATH = @"\{0}";
     private const string PLAYERS_FILE = "players.txt";
 
     private static string ArchiveDir;
-    private static string ConfigDir;
+    internal static string ConfigDir;
     private static string ServerConfigDir;
     private static string SettingsFile;
+    private static string _triggersDbFile;
+    private static string _triggersLastDbFile;
+    internal static event Action<string> EventsLoadingText;
     private static bool initDone = false;
     private static bool SettingsUpdated = false;
+    private static bool _isDone;
 
     private static readonly ConcurrentDictionary<string, string> ApplicationSettings = new ConcurrentDictionary<string, string>();
-
+    internal static void SetSetting(string key, bool value) => SetSetting(key, value.ToString());
+    internal static void SetSetting(string key, double value) => SetSetting(key, value.ToString(CultureInfo.InvariantCulture));
+    internal static void SetSetting(string key, int value) => SetSetting(key, value.ToString(CultureInfo.InvariantCulture));
+    internal static string GetTriggersDbFile() => _triggersDbFile;
+    internal static string GetTriggersLastDbFile() => _triggersLastDbFile;
     internal static string GetArchiveDir()
     {
       Init();
@@ -74,11 +82,11 @@ namespace EQLogParser
       return result;
     }
 
-    internal static int GetSettingAsInteger(string key)
+    internal static int GetSettingAsInteger(string key, int def = 0)
     {
-      if (int.TryParse(GetSetting(key), out int result) == false)
+      if (int.TryParse(GetSetting(key), out var result) == false)
       {
-        result = int.MaxValue;
+        result = def;
       }
       return result;
     }
@@ -188,13 +196,28 @@ namespace EQLogParser
         LogsDir = Environment.ExpandEnvironmentVariables(APP_DATA + @"\logs\");
         ServerConfigDir = ConfigDir + PETMAP_PATH;
         SettingsFile = ConfigDir + @"\settings.txt";
+        _triggersDbFile = ConfigDir + @"triggers.db";
+        _triggersLastDbFile = ConfigDir + @"triggers-2.2.36.db";
 
         // create config dir if it doesn't exist
         Directory.CreateDirectory(ConfigDir);
         // create logs dir if it doesn't exist
         Directory.CreateDirectory(LogsDir);
-
+        UpdateStatus("Reading Settings");
         LoadProperties(ApplicationSettings, ReadList(SettingsFile));
+      }
+    }
+
+    internal static void UpdateStatus(string text)
+    {
+      if (!_isDone)
+      {
+        EventsLoadingText?.Invoke(text);
+      }
+
+      if (text == "Done")
+      {
+        _isDone = true;
       }
     }
 
@@ -257,7 +280,33 @@ namespace EQLogParser
 
       return result;
     }
+    internal static string ReadConfigFile(string fileName)
+    {
+      string result = null;
+      var path = ConfigDir + fileName;
 
+      try
+      {
+        if (File.Exists(path))
+        {
+          result = File.ReadAllText(path);
+        }
+      }
+      catch (IOException ex)
+      {
+        LOG.Error(ex);
+      }
+      catch (UnauthorizedAccessException uax)
+      {
+        LOG.Error(uax);
+      }
+      catch (SecurityException se)
+      {
+        LOG.Error(se);
+      }
+
+      return result;
+    }
     internal static void SaveList(string fileName, List<string> list)
     {
       try
