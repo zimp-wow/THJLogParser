@@ -48,10 +48,10 @@ namespace EQLogParser
 
     private void DoPreProcess(string line, double dateTime, bool monitor)
     {
-      var lineData = new LineData { Action = line[27..], BeginTime = dateTime, LineNumber = _lineCount };
+      var lineData = new LineData { FullLine = line, Action = line[27..], BeginTime = dateTime, LineNumber = _lineCount };
 
       // avoid having other things parse chat by accident
-      if (ChatLineParser.ParseChatType(lineData.Action) is { } chatType)
+      if (ChatLineParser.Process(lineData, line) is { } chatType)
       {
         chatType.BeginTime = lineData.BeginTime;
         chatType.Text = line; // workaround for now?

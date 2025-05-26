@@ -226,7 +226,7 @@ namespace EQLogParser
       }
 
       Interlocked.Exchange(ref _activityLastTicks, DateTime.UtcNow.Ticks);
-      var lineData = new LineData { Action = line[27..], BeginTime = dateTime };
+      var lineData = new LineData { FullLine = line, Action = line[27..], BeginTime = dateTime };
 
       await _activeTriggerSemaphore.WaitAsync();
 
